@@ -1,11 +1,16 @@
+import json
+
 from lib import process_company
 
 from pymongo import MongoClient
 import numpy as np
 
-# GET MONGO_CONF from conf..
 
+MONGO_CONF_FILE = '../shared/mongoconf.json'
 COMPANIES_CSV = '../shared/companies.csv'
+
+with open(MONGO_CONF_FILE) as f:
+    MONGO_CONF = json.load(f)
 
 def read_companies(companies_file = COMPANIES_CSV):
     with open(companies_file) as f:
@@ -15,7 +20,7 @@ def get_stock_data(db, company):
     """ Returns from mongodb
     :returns: stock_data for given company. format: numpy array with columns for date (timestamp) and value
     """
-    return db.stockhistos.find({'symbol': company})
+    return list(db.stockhistos.find({'symbol': company}))
 
 def get_articles(db, company):
     """ Return articles as numpy array from mongodb
@@ -23,12 +28,10 @@ def get_articles(db, company):
     :returns: numpy array with columns for 'url', 'title', 'company', 'newspaper', 'publication_timestamp'
 
     """
-    return db.articles.find({'company': company})
+    return list(db.articles.find({'company': company}))
 
 
 def put_newspaper_data(db, company, newspapers_data):
-
-
     results = db.newspapers.insert_many(newspapers_data)
 
 
@@ -43,7 +46,7 @@ def main():
         stock_data = get_stock_data(db, company)
         articles = get_articles(db, company)
 
-        newspapers_data = process_company(stock_data, articles)
+        newspapers_data = process_company(company, stock_data, articles)
         put_newspaper_data(db, company, newspapers_data)
 
 if __name__ == '__main__':

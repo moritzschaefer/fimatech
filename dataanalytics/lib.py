@@ -35,7 +35,7 @@ def process_company(company, stock_data, articles):
 
     stock_data_df = pd.DataFrame(stock_data)
     articles_df = pd.DataFrame(articles, columns=['url', 'title', 'company', 'newspaper', 'publication_timestamp'])
-    articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(article, stock_data), axis=1)
+    articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(articles_df, stock_data_df), axis=1)
     newspapers = pd.DataFrame(columns=['newspaper', 'max_impact', 'best_impact', 'worst_impact'])
     for newspaper, group in articles_df.groupby('newspaper'):
         # TODO: maybe calculate best and worst differently (without filtering, square without losing sign)
