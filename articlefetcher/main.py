@@ -63,16 +63,16 @@ def prepare_articles(company, articles):
     def prepare_article(company, article):
         data = article['source']['enriched']['url']
         try:
-            publication_date = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
+            publication_timestamp = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
         except Exception: # ParserError: # TODO: find import..
-            publication_date = arrow.get(article['timestamp'])
+            publication_timestamp = arrow.get(article['timestamp'])
 
         return {
                 'url': data['url'],
                 'title': data['title'],
                 'company': company,
-                'newspaper_agency': urllib.parse.urlparse(data['url']).netloc,
-                'publication_date': publication_date.datetime
+                'newspaper': urllib.parse.urlparse(data['url']).netloc,
+                'publication_timestamp': publication_date.timestamp
                 }
 
     # TODO should we filter out values (for example the ones without publicationDate)??
