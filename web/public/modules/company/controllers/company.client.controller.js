@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams',
-  function($scope, $http, $location, $cookieStore, Authentication, $stateParams) {
+angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
+  function($scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
     $scope.authentication = Authentication;
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
@@ -127,6 +127,10 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
           doc.addImage(dataURL, 'jpeg', 0, 30);
           doc.save("Influence of '" + $scope.newspaper + "' on '" + $scope.company + "'.pdf");
       });
+    };
+
+    $scope.view = function(url) {
+      $window.open(url);
     };
   }
 ]);

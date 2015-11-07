@@ -82,9 +82,11 @@
         <div class="table-row" ng-repeat="article in articles">
           <div class="row row-parent">
             <a href="{{article.url}}" class="col-xs-4" class="description" target="_blank">{{article.title}}</a>
-            <div class="col-xs-offset-2 col-xs-4" class="description">{{ dateForArticle(article); }}</div>
-            <button type="submit" class="btn btn-primary btn-small col-xs-2">View</button>
-
+            <div class="col-xs-2" class="description">{{ article.score }} Score</div>
+            <div class="col-xs-4" class="description">{{ dateForArticle(article); }}</div>
+            <div class="col-xs-2" class="description">
+              <button type="submit" class="btn btn-primary btn-small" ng-click="view(article.url);">View</button>
+            </div>
           </div>
         </div>
       </div>
