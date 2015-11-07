@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>{{title}}</title>
+
+	<!-- General META -->
+	<meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<!-- Semantic META -->
+	<meta name="keywords" content="{{keywords}}">
+	<meta name="description" content="{{description}}">
+
+	<!-- Fav Icon -->
+	<link href="/modules/core/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+	<!-- Inject the CSS files. -->
+	<!-- inject:css -->
+	<link rel="stylesheet" href="dist/combined.css">
+	<!-- endinject -->
+
+	<!-- HTML5 Shim -->
+	<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+</head>
+
+<body id="site" class="ng-cloak" ng-controller="AuthenticationController">
+
+	<!-- Navigation -->
+	<nav data-ng-include="'/modules/core/views/navigation.client.view.html'" id="site-navigation" class="navbar navbar-default" ng-class="{'navbar-fixed-top':navbarFixed,'navbar-static-top':!navbarFixed}" ng-controller="NavigationController" data-ng-init="init()"></nav>
+
+	<!-- Main Content -->
+	<!-- Main Content -->
+	<main id="site-content" data-ui-view></main>
+
+	<!-- Footer -->
+	<footer data-ng-include="'/modules/core/views/footer.client.view.html'" id="site-footer"></footer>
+
+	<!-- Inject the JS files. -->
+	<!-- inject:js -->
+	<script src="dist/combined.js"></script>
+	<script src="config.js"></script>
+	<script src="application.js"></script>
+	<script src="modules/company/company.client.module.js"></script>
+	<script src="modules/core/core.client.module.js"></script>
+	<script src="modules/dashboard/dashboard.client.module.js"></script>
+	<script src="modules/helper/helper.client.module.js"></script>
+	<script src="modules/search/search.client.module.js"></script>
+	<script src="modules/users/users.client.module.js"></script>
+	<script src="modules/company/config/company.client.routes.js"></script>
+	<script src="modules/company/controllers/company.client.controller.js"></script>
+	<script src="modules/company/filter/amount.client.filter.js"></script>
+	<script src="modules/core/config/core.client.routes.js"></script>
+	<script src="modules/core/controllers/Home.client.controller.js"></script>
+	<script src="modules/core/controllers/ModalView.client.controller.js"></script>
+	<script src="modules/core/controllers/Navigation.client.controller.js"></script>
+	<script src="modules/core/services/modal.client.service.js"></script>
+	<script src="modules/dashboard/config/dashboard.client.routes.js"></script>
+	<script src="modules/dashboard/controllers/dashboard.private.client.controller.js"></script>
+	<script src="modules/helper/services/PromiseFactory.client.service.js"></script>
+	<script src="modules/search/config/search.client.routes.js"></script>
+	<script src="modules/search/controllers/search.client.controller.js"></script>
+	<script src="modules/search/directives/ngEnter.client.view.js"></script>
+	<script src="modules/users/config/users.client.config.js"></script>
+	<script src="modules/users/config/users.client.routes.js"></script>
+	<script src="modules/users/controllers/authentication.client.controller.js"></script>
+	<script src="modules/users/controllers/password.client.controller.js"></script>
+	<script src="modules/users/controllers/profile.client.controller.js"></script>
+	<script src="modules/users/services/authentication.client.service.js"></script>
+	<script src="modules/users/services/signout.client.service.js"></script>
+	<script src="modules/users/services/users.client.service.js"></script>
+	<!-- endinject -->
+</html>

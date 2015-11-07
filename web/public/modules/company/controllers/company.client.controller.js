@@ -16,35 +16,42 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
     $scope.company = $scope.id;
 
     // Data chart configuration.
-    $scope.optionsDataChart = {
+    $scope.optionsDataChart1 = {
         scaleShowGridLines: true,
         scaleShowHorizontalLines: true,
         scaleShowVerticalLines: false,
         scaleShowLabels: true,
         scaleBeginAtZero: false,
         bezierCurve: false,
-        animation: true,
-        showScale: false,
+        animation: false,
+        showScale: true,
         showTooltips: true,
         pointDot: false,
         pointDotRadius: 1,
         pointHitDetectionRadius: 1,
         datasetStrokeWidth: 0.3,
         maintainAspectRation: false,
-        datasetFill: true,
-        customTooltips: function(tooltip) {
-          if (!tooltip) {
-            return;
-          }
-          // TODO: Remove that HACK
-          var year = '2015'
-          if (tooltip.text.substring(0, year.length) === year ) {
-            return false
-          } else {
-
-          }
-        }
+        datasetFill: true
     };
+
+    $scope.optionsDataChart2 = {
+        scaleShowGridLines: true,
+        scaleShowHorizontalLines: true,
+        scaleShowVerticalLines: false,
+        scaleShowLabels: true,
+        scaleBeginAtZero: false,
+        bezierCurve: false,
+        animation: false,
+        showScale: true,
+        showTooltips: true,
+        pointDot: true,
+        pointDotRadius: 3,
+        pointHitDetectionRadius: 5,
+        datasetStrokeWidth: 0.3,
+        maintainAspectRation: false,
+        datasetFill: true
+    };
+
 
     // Initialize the company data.
     $scope.initCompanyData = function() {
@@ -78,16 +85,17 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       var dataLabelsArray = [];
 
       // Process stock data.
+      var labelsCount = 0
       angular.forEach(stockData, function(data) {
         dataArray.push(data.open);
-        dataLabelsArray.push(data.timestamp)
+        if (labelsCount % 30 === 0) {
+          dataLabelsArray.push(moment(data.timestamp).format('Do MMM'));
+        } else {
+          dataLabelsArray.push("")
+        }
+        labelsCount++;
       });
 
-      // Process news data.
-      angular.forEach(stockData, function(data) {
-        dataArray.push(data.open);
-        dataLabelsArray.push(data.timestamp)
-      });
 
       // Draw the graphs.
       $scope.labels = dataLabelsArray

@@ -22,15 +22,15 @@ def get_article_data(url):
     return article.text.split('\n\n')
 
 #Takes an array of json data as input(which is from the retval of get_sentiment_data()
-#Returns a single float factor that represents positive connotation if bias factor >0 and
-#negative if bias factor < 0
+#Returns an array of sentiment factors ranging from -1 to +1, corresponding to each element in the text array(as above)
 def get_bias(sentiment_data_list):
     bias = []
     for i in range(len(sentiment_data_list)):
         bias.append( sentiment_data_list[i]['aggregate']['score'])
     return bias
     
-def analyse_debug(url):
+#Just need to run this function
+def format_article(url):
     text = get_article_data(url)
     sentiments = get_sentiment_data(text)
     bias = get_bias(sentiments)
@@ -39,12 +39,15 @@ def analyse_debug(url):
         rms_bias += i**2
     rms_bias /= len(bias)
     rms_bias = rms_bias ** 0.5
+
+    formatted_article = ""
+    
     for i in range(len(bias)):
         if bias[i] > rms_bias:
-            print("\n[["+text[i]+"]]\n")
+            formatted_article += "\n[["+text[i]+"]]\n"
         elif bias[i] < -rms_bias:
-            print("\n{{"+text[i]+"}}\n")
+            formatted_article += "\n{{"+text[i]+"}}\n"
         else:
-            print(text[i])
-
+            formatted_article += (text[i])
+    return formatted_article
 
