@@ -71,30 +71,23 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
             pointStrokeColor: "#fff",
             pointHighlightFill: "#fff",
             pointHighlightStroke: "rgba(151,187,205,1)",
-            data: dataArray,
-            pointDot: false
-          }, {
-            label: "test",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: dataArray,
-            pointDot: false
+            data: dataArray
           }
+          // }, {
+          //   label: "test",
+          //   fillColor: "rgba(151,187,205,0.2)",
+          //   strokeColor: "rgba(151,187,205,1)",
+          //   pointColor: "rgba(0,0,0,0)",
+          //   pointStrokeColor: "rgba(0,0,0,0)",
+          //   pointHighlightFill: "rgba(0,0,0,0)",
+          //   pointHighlightStroke: "rgba(0,0,0,0)",
+          //   data: dataArray2,
+          // }
         ]
       }
 
       var chartCanvas = document.getElementById("canvas").getContext("2d");
-      var lineChart = new Chart(chartCanvas).Line(data, {
-
-        showScale: true,
-        scaleLineColor: "rgba(0,0,0,.1)",
-        scaleLineWidth: 1,
-        scaleShowLabels: true,
-      });
+      var lineChart = new Chart(chartCanvas).Line(data);
     };
   }
 ]);
