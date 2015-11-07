@@ -1,0 +1,7 @@
+<ul tabindex="-1" class="typeahead dropdown-menu" data-ng-show="searchResults.length > 0" role="select">
+  <li data-ng-repeat="searchResult in searchResults" data-ng-class="{active: $index == $activeIndex}">
+    <a role="menuitem" tabindex="-1" data-ng-click="select(searchResult)">
+      {{ searchResult }}
+    </a>
+  </li>
+</ul>

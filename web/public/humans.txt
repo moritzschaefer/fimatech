@@ -1,0 +1,11 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Robert Weindl -- Developer -- @robertweindl
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3, Bootstrap, Angular.js, Node.js, MongoDB
+    jQuery, Passport,
