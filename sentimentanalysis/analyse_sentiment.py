@@ -1,4 +1,4 @@
-
+import logging
 from simplejson import loads
 from urllib import request, parse
 #pip3 install newspaper3k
@@ -25,14 +25,26 @@ def get_article_data(url):
 #Returns a single float factor that represents positive connotation if bias factor >0 and
 #negative if bias factor < 0
 def get_bias(sentiment_data_list):
-    bias = 0
-    for sentence_sentiment in sentiment_data_list:
-        if sentence_sentiment['positive']:
-            #Sentence is positive
-            bias += sentence_sentiment['aggregate']['score']
-        if sentence_sentiment['negative']:
-            #Sentence is negative
-            bias += sentence_sentiment['aggregate']['score']
+    bias = []
+    for i in range(len(sentiment_data_list)):
+        bias.append( sentiment_data_list[i]['aggregate']['score'])
     return bias
     
+def analyse_debug(url):
+    text = get_article_data(url)
+    sentiments = get_sentiment_data(text)
+    bias = get_bias(sentiments)
+    rms_bias = 0
+    for i in bias:
+        rms_bias += i**2
+    rms_bias /= len(bias)
+    rms_bias = rms_bias ** 0.5
+    for i in range(len(bias)):
+        if bias[i] > rms_bias:
+            print("\n[["+text[i]+"]]\n")
+        elif bias[i] < -rms_bias:
+            print("\n{{"+text[i]+"}}\n")
+        else:
+            print(text[i])
+
 
