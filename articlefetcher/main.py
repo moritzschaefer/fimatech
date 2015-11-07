@@ -5,7 +5,7 @@ import requests
 from pymongo import MongoClient
 import arrow
 
-from conf import ALCHEMY_API_KEY, MONGO_CONF, BASE_QUERY, COMPANIES_CSV
+from conf import ALCHEMY_API_KEY, MONGO_CONF_FILE, BASE_QUERY, COMPANIES_CSV
 
 # get list of companies
 #
@@ -87,7 +87,10 @@ def put_company_articles(company, articles):
     :articles: array of article objects to be put
 
     """
-    client = MongoClient("mongodb://{host}:{port}".format(**MONGO_CONF))
+
+    with open(MONGO_CONF_FILE) as f:
+        mongo_conf = json.load(f)
+    client = MongoClient("mongodb://{host}:{port}".format(**mongo_conf))
     db = client[MONGO_CONF['database']]
 
     results = db.articles.insert_many(articles)
