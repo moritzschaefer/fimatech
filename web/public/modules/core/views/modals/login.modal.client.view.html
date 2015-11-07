@@ -1,0 +1,42 @@
+<div class="modal-content" ng-controller="ModalViewController">
+    <button type="button" class="close" aria-label="Close" ng-click="hideModal()"><span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+        <h4 class="modal-title text-center">Log In</h4>
+    </div>
+    <div class="modal-body">
+        <div class="social-button-group">
+            <ul class="list-unstyled">
+                <li class="offset-top-10">
+                    <form ng-controller="AuthenticationController" data-ng-submit="signin(credentials.email, credentials.password)" autocomplete="off">
+                        <fieldset>
+                            <div data-ng-show="error" class="text-danger">
+                                <strong data-ng-bind="error"></strong>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email" autofocus>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+
+                            <div class="forgot-password pull-left">
+                                <small>
+                                <a href="/#!/#" ng-click="displayForgotPasswordModal()">Forgot your password?</small></a>
+                            </div>
+                                <button type="submit" class="btn btn-default pull-right">Sign In</button>
+                            </div>
+                        </fieldset>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div ng-controller="AuthenticationController" class="text-center">
+            Not a fimatec member yet?
+            <a ng-href="/#!/#" ng-click="changeModal('signup-email','xs',true)" class="modal-link">Sign Up</a>
+        </div>
+    </div>
+</div>

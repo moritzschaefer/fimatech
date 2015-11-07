@@ -1,0 +1,45 @@
+<div class="modal-content" ng-controller="ModalViewController">
+    <button type="button" class="close" aria-label="Close" ng-click="hideModal()"><span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+        <h4 class="modal-title text-center">Sign Up</h4>
+    </div>
+    <div class="modal-body">
+
+        <form name="userSignupForm" ng-controller="AuthenticationController" data-ng-submit="signup(credentials.firstName, credentials.lastName, credentials.company, credentials.email, credentials.password)" class="signin form-horizontal" novalidate autocomplete="off">
+            <fieldset>
+                <div data-ng-show="error" class="text-center text-danger">
+                    <strong data-ng-bind="error"></strong>
+                </div>
+                <div class="form-group">
+                    <input type="text" required id="firstName" name="firstName" class="form-control" data-ng-model="credentials.firstName" placeholder="First Name" autofocus>
+                </div>
+                <div class="form-group">
+                    <input type="text" required id="lastName" name="lastName" class="form-control" data-ng-model="credentials.lastName" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <input type="text" required id="companyName" name="companyName" class="form-control" data-ng-model="credentials.company" placeholder="Company">
+                </div>
+                <div class="form-group">
+                    <input type="email" required id="email" name="email" class="form-control" data-ng-model="credentials.email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <input type="password" required id="password" name="password" class="form-control" data-ng-model="credentials.password" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="password" required id="confirmPassword" name="confirmPassword" class="form-control" data-ng-model="credentials.confirmPassword" placeholder="Confirm Password">
+                </div>
+                <div class="text-center form-group">
+                    <button ng-disabled="userSignupForm.$invalid" type="submit" class="btn btn-default pull-right">Sign Up</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div ng-controller="AuthenticationController" class="text-center">
+            Already a fimatec member?
+            <a ng-href="/#!/#" ng-click="changeModal('login','xs',true)" class="modal-link">Log In</a>
+        </div>
+        </div>
+    </div>
+</div>

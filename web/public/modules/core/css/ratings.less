@@ -1,0 +1,81 @@
+@import "colors.less";
+
+.stars-rating-group {
+    .stars-rating {
+        color: @colorGreyLightest;
+        .half-star, .full-star {
+            color: @colorGold;
+        }
+        .half-star {
+            position: relative;
+            &:before {
+                position: relative;
+                z-index: 9;
+                width: 47%;
+                display: block;
+                overflow: hidden;
+            }
+            &:after {
+                content: '\e006';
+                position: absolute;
+                z-index: 8;
+                color: @colorGreyLightest;
+                top: 0;
+                left: 0;
+            }
+        }
+    }
+    .reviews {
+        font-size: 12px;
+        text-align: right;
+    }
+    h4 {
+        font-size: 14px;
+    }
+}
+
+.stars-rating-group-large {
+    font-size: 20px;
+    h4 {
+        font-size: 20px;
+    }
+}
+
+.review {
+    padding: 20px;
+    padding-left: 120px;
+    overflow: hidden;
+    border-bottom: 1px solid @colorDarker;
+    .review-image {
+        float: left;
+        margin-left: -100px;
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: @colorBlack;
+        }
+    }
+    .review-content {
+        float: left;
+        width: 100%;
+        .review-head {
+            overflow: hidden;
+            h4 {
+                float: left;
+                font-size: 16px;
+            }
+            .stars-rating-group {
+                float: left;
+                margin-left: 10px;
+            }
+        }
+        p {
+            margin: 5px 0 7px;
+        }
+        h6 {
+            color: @colorGreyLight;
+            font-weight: 300;
+        }
+    }
+}

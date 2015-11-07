@@ -1,0 +1,27 @@
+<section data-ng-controller="DashboardController" class="users" data-ng-init="initDashboard()">
+  <div class="container">
+    <div class="content-full">
+      <div class="content-box">
+        <div class="box-head">Asset History [Euro]</div>
+        <div class="box-content">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <div class="chart-container">
+                <canvas id="line" class="chart chart-line" chart-data="data" chart-labels="labels" chart-legend="true" chart-series="series" style="width: 523px; height: 100px;"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content-box">
+        <div class="box-head">Recent Searches</div>
+
+        <div class="table-row" ng-repeat="transaction in transactions | limitTo: 3">
+          <div class="row row-parent">
+            <div class="col-xs-2" class="description">{{transaction.description}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
