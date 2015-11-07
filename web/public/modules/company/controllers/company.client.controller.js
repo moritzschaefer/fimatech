@@ -27,6 +27,25 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       }, function(err) {
 	  console.log(err);
       });
+
+	    req = {        
+		    method: 'GET',
+		    url: 'http://fimatech.herokuapp.com/api/newspaper/'+$scope.company+'/'
+	    };
+	    $http(req).then(function(response) {
+		    $scope.best = response.data.sort(function(a,b) {
+			    return b.best_impact > a.best_impact;
+		    }).slice(0, 5);
+		    $scope.max = response.data.sort(function(a,b) {
+			    return b.max_impact > a.max_impact;
+		    }).slice(0, 5);
+		    $scope.worse = response.data.sort(function(a,b) {
+			    return b.worse_impact > a.worse_impact;
+		    }).slice(0, 5);
+	    }, function(err) {
+		    console.log(err);
+	    });
+		    
     };
 
 
