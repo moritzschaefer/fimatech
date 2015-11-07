@@ -52,6 +52,8 @@ def process_company(company, stock_data, articles):
     articles_df = pd.DataFrame(articles, columns=['url', 'title', 'company', 'newspaper', 'publication_timestamp'])
     if len(articles_df) == 0:
         raise ValueError('articles must not be empty')
+    if len(stock_data_df) == 0:
+        raise ValueError('stack_data must not be empty')
     articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(article, stock_data_df), axis=1)
     articles_df = articles_df[np.logical_not(np.isnan(articles_df['cc']))]
     newspapers = []

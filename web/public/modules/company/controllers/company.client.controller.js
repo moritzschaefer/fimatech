@@ -6,52 +6,9 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
 
-    // Variable initizalization.
-    $scope.data = [];
-    $scope.labels = [];
-    $scope.series = ['Data', 'News']
-
     // Initialize the passed state parameter.
     $scope.id = $stateParams.id;
     $scope.company = $scope.id;
-
-    // Data chart configuration.
-    $scope.optionsDataChart1 = {
-        scaleShowGridLines: true,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: false,
-        scaleShowLabels: true,
-        scaleBeginAtZero: false,
-        bezierCurve: false,
-        animation: false,
-        showScale: true,
-        showTooltips: true,
-        pointDot: false,
-        pointDotRadius: 1,
-        pointHitDetectionRadius: 1,
-        datasetStrokeWidth: 0.3,
-        maintainAspectRation: false,
-        datasetFill: true
-    };
-
-    $scope.optionsDataChart2 = {
-        scaleShowGridLines: true,
-        scaleShowHorizontalLines: true,
-        scaleShowVerticalLines: false,
-        scaleShowLabels: true,
-        scaleBeginAtZero: false,
-        bezierCurve: false,
-        animation: false,
-        showScale: true,
-        showTooltips: true,
-        pointDot: true,
-        pointDotRadius: 3,
-        pointHitDetectionRadius: 5,
-        datasetStrokeWidth: 0.3,
-        maintainAspectRation: false,
-        datasetFill: true
-    };
-
 
     // Initialize the company data.
     $scope.initCompanyData = function() {
@@ -72,6 +29,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       });
     };
 
+
     $scope.initAssetHistory = function(stockData) {
       //
       var dataArray = [];
@@ -89,11 +47,47 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
         labelsCount++;
       });
 
+      // Process news data.
+
 
       // Draw the graphs.
-      $scope.labels = dataLabelsArray
-      $scope.data = []
-      $scope.data.push(dataArray)
+
+      // Data chart configuration.
+      var data = {
+        labels: dataLabelsArray,
+        datasets: [
+          {
+            label: "test",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: dataArray,
+            pointDot: false
+          }, {
+            label: "test",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
+            data: dataArray,
+            pointDot: false
+          }
+        ]
+      }
+
+      var chartCanvas = document.getElementById("canvas").getContext("2d");
+      var lineChart = new Chart(chartCanvas).Line(data, {
+
+        showScale: true,
+        scaleLineColor: "rgba(0,0,0,.1)",
+        scaleLineWidth: 1,
+        scaleShowLabels: true,
+      });
     };
   }
 ]);
