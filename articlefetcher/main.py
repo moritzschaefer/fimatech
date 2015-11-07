@@ -44,7 +44,7 @@ def pull_company_articles(company):
 
     # TODO: use "next" parameter to add more values
 
-    response = requests.get(formatted_query)#.json()
+    response = requests.get(formatted_query).json()
     import ipdb; ipdb.set_trace()
     return response['result']['docs']
 
@@ -64,20 +64,19 @@ def prepare_articles(company, articles):
     def prepare_article(company, article):
         data = article['source']['enriched']['url']
         try:
-            publication_date = arrow.get(data['publicationDate']['date'])
-        except ParserError:
-            publication_date = arrow.get(article['timestamp'], 'YYYYMMDDTHHmmss')
+            publication_date = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
+        except Exception: # ParserError: # TODO: find import..
+            publication_date = arrow.get(article['timestamp'])
 
         return {
                 'url': data['url'],
                 'title': data['title'],
                 'company': company,
-                'newspaper_agency': urllib.parse(data['url']).netloc,
-                'publication_date': publication_date
+                'newspaper_agency': urllib.parse.urlparse(data['url']).netloc,
+                'publication_date': publication_date.datetime
                 }
 
     # TODO should we filter out values (for example the ones without publicationDate)??
-    import ipdb; ipdb.set_trace()
 
     return [prepare_article(company, article) for article in articles]
 

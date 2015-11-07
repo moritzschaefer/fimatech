@@ -1,6 +1,7 @@
 MONGO_CONF = {
         'host': 'localhost',
-        'port': 27017
+        'port': 27017,
+        'database': 'fimatech'
         }
 
 ALCHEMY_API_KEY = '96a5bad2b00632a91fe71780b174da374345e82d'
