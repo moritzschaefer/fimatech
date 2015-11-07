@@ -5,7 +5,7 @@ import requests
 from pymongo import MongoClient
 import arrow
 
-from conf import ALCHEMY_API_KEY, MONGO_CONF, BASE_QUERY
+from conf import ALCHEMY_API_KEY, MONGO_CONF, BASE_QUERY, COMPANIES_CSV
 
 # get list of companies
 #
@@ -17,7 +17,7 @@ from conf import ALCHEMY_API_KEY, MONGO_CONF, BASE_QUERY
 # - pagination ? (just call next). how many articles max per company? (10000 would mean)
 # -
 
-def get_companies(filename='companies.csv'):
+def get_companies(filename=COMPANIES_CSV):
     """ Loads csv and reads companies
 
     :filename: csv file with companies
