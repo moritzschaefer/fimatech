@@ -1,6 +1,7 @@
 import urllib
 import logging
 import json
+import sys
 
 import requests
 from pymongo import MongoClient
@@ -45,8 +46,16 @@ def pull_company_articles(company):
 
     # TODO: use "next" parameter to add more values
 
+
     response = requests.get(formatted_query).json()
-    return response['result']['docs']
+    with open('raw_{}.json'.format(arrow.now().timestamp), 'w') as f:
+        json.dump(response, f)
+
+    try:
+        return response['result']['docs']
+    except KeyError as e:
+        print('API Error: {}'.format(e))
+        sys.exit(1)
 
 def prepare_articles(company, articles):
     """ Prepare object array so it can be put into mongodb directly
@@ -62,7 +71,13 @@ def prepare_articles(company, articles):
     # 5. News article page name extracted from url (basicly ownly basename domain (extracted from url))
 
     def prepare_article(company, article):
-        data = article['source']['enriched']['url']
+        try:
+            data = article['source']['enriched']['url']
+        except KeyError as e:
+            if 'enriched' in e.message:
+                import ipdb; ipdb.set_trace()
+            else:
+                print('API Error: {}'.format(e))
         try:
             publication_date = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
         except Exception: # ParserError: # TODO: find import..
@@ -92,7 +107,7 @@ def put_company_articles(company, articles):
     with open(MONGO_CONF_FILE) as f:
         mongo_conf = json.load(f)
     client = MongoClient("mongodb://{host}:{port}".format(**mongo_conf))
-    db = client[MONGO_CONF['database']]
+    db = client[mongo_conf['database']]
 
     results = db.articles.insert_many(articles)
 
