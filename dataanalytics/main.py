@@ -49,8 +49,13 @@ def main():
         stock_data = get_stock_data(db, company)
         articles = get_articles(db, company)
 
-        newspapers_data = process_company(company, stock_data, articles)
-        put_newspaper_data(db, company, newspapers_data)
+        try:
+            newspapers_data = process_company(company, stock_data, articles)
+        except ValueError:
+            print('{} Has no article Data'.format(company))
+            continue
+        else:
+            put_newspaper_data(db, company, newspapers_data)
 
 if __name__ == '__main__':
     main()
