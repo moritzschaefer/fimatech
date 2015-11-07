@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('dashboard').filter('dashboardAmountFilter', ['$cookieStore', function($cookieStore) {
+angular.module('company').filter('dashboardAmountFilter', ['$cookieStore', function($cookieStore) {
   return function(transaction) {
 
     var user = $cookieStore.get('user');
