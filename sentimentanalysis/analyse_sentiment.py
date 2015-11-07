@@ -1,26 +1,22 @@
 import logging
 from simplejson import loads
 from urllib import request, parse
-import urllib
 #pip3 install newspaper3k
-from newspaper import Article, article
+from newspaper import Article
 HAVEN_API_KEY = "e3118bd3-75ea-4d29-ad0e-81bcfe4850c4"
 HAVEN_BASE_URL = "https://api.havenondemand.com/1/api/sync/analyzesentiment/v1?text={text}&apikey={apikey}"
 
-#Takes a string array as input and sends a request to Haven for each element and returns an array of json structures
-def get_sentiment_data(text_array):
-    sentiment_list = []
-    for para in text_array:
-        response = request.urlopen(HAVEN_BASE_URL.format(text=parse.quote(para), apikey=HAVEN_API_KEY)).read()
-        sentiment_list.append(loads(response))
-    return sentiment_list
-
+#Takes a string  input and sends a request to Haven returning a json structure
+def get_sentiment_data(text):
+    response = request.urlopen(HAVEN_BASE_URL.format(text=parse.quote(text), apikey=HAVEN_API_KEY)).read()
+    return loads(response)
+    
 #Returns an array of text fragments from the article URL
 def get_article_data(url):
     article = Article(url)
     article.download()
     article.parse()
-    return article.text.split('\n\n')
+    return article.text
 
 #Takes an array of json data as input(which is from the retval of get_sentiment_data()
 #Returns an array of sentiment factors ranging from -1 to +1, corresponding to each element in the text array(as above)
@@ -32,27 +28,27 @@ def get_bias(sentiment_data_list):
 
 #Just need to run this function
 def format_article(url):
-    try:
-        text = get_article_data(url)
-        sentiments = get_sentiment_data(text)
-    except (article.ArticleException, urllib.error.HTTPError):
-        raise RuntimeError('Error fetching article')
-
-    bias = get_bias(sentiments)
-    rms_bias = 0
-    for i in bias:
-        rms_bias += i**2
-    rms_bias /= len(bias)
-    rms_bias = rms_bias ** 0.5
-
-    formatted_article = ""
-
-    for i in range(len(bias)):
-        if bias[i] > rms_bias:
-            formatted_article += "\n[["+text[i]+"]]\n"
-        elif bias[i] < -rms_bias:
-            formatted_article += "\n{{"+text[i]+"}}\n"
-        else:
-            formatted_article += (text[i])
-    return formatted_article
-
+    #Create article from link
+    #Download and parse article
+    text = get_article_data(url)
+    
+    #Get sentiment data of entire text
+    sentiment = get_sentiment_data(text)
+    #Split text
+    text = text.split('\n\n')
+    
+    #For all the negative 'original texts' filter through the text and find the appropriate sentences to match, add brackets to them
+    for negative in sentiment['negative']:
+        match = negative['original_text']
+        print (match)
+        for i in range(len(text)):
+            if match in text[i] and (text[0] != '[' or text[0] != '{' ):
+                text[i] = "{"+text[i]+"}"
+    #Same for positive
+    for positive in sentiment['positive']:
+        match = positive['original_text']
+        for i in range(len(text)):
+            if match in text[i] and (text[0] != '[' or text[0] != '{' ):
+                text[i] = "["+text[i]+"]"
+    #combine the text array back into a single block of text and return
+    return ''.join(text)

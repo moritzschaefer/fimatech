@@ -36,7 +36,7 @@ def _calculate_cc(article, stock_data):
     # plt.legend()
     # plt.show()
 
-    return m
+    return m*24*3600
 
 def process_company(company, stock_data, articles):
     """ Processes the articles for given company and returns a list of newspapers with according calculated values. check README.md for more information
