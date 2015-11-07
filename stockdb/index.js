@@ -10,6 +10,29 @@ var port = process.env.PORT || 8080;
 var baseURL = 'marketdata.websol.barchart.com';
 var basePath = '/getHistory.json?key=5e0a5a18efcafd37d8495839faed111b&';
 
+var uriUtil = require('mongodb-uri');
+var mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
+
+const mongodbUri = "mongodb://localhost/fimatech";
+var mongooseUri = uriUtil.formatMongoose(mongodbUri);
+
+console.log("Connect to " + mongodbUri);
+mongoose.connect(mongooseUri);
+conn = mongoose.connection;
+
+conn.on('error', function(err) {
+    console.log("Mongoose Connection Error: " + err);
+    throw err;
+});
+
+conn.on('connected', function() {
+    console.log("Successfully connected to Mongolab");
+    // @todo start all the database stuff asynchronously
+});
+
+var StockHisto = require('./models/stockhisto')
+
 var http = require('http');
 var moment = require('moment');
 var regression = require('regression');
@@ -19,8 +42,6 @@ function getHisto(sym, unix, days, callback) {
     var startDate = moment.unix(u-40*60*60).format("YYYYMMDD"); // equrivalent to one day before given date
 
     // @note: having it a day before doesn't seem to work...
-
-    console.log(startDate);
 
     http.get({
 	host: baseURL,
@@ -82,17 +103,78 @@ router.get('/genStockData/:sym/:date', function(req, res) {
     });
 });
 
-// FOR UI
-router.get('/gethisto/:sym/:date', function(req, res) {
-    
-    // convert Unixtimestamp to the api's format
+router.get('/feed/:sym/:date', function(req, res) {
     var unix = req.params.date;
+
+    // for debugging
+    if (unix == "now") {
+	unix = Math.floor(Date.now() / 1000); // Get current timestamp
+    }
     
     getHisto(req.params.sym, unix, 0, function(d) {
-	res.json({error: "", results: d});
+	d.forEach(function(datapoint) {
+	    var stockentry = new StockHisto({
+		symbol:    req.params.sym,
+		timestamp: (new Date(datapoint.timestamp)).getTime() / 1000,
+		open:      datapoint.open
+	    });
+
+	    stockentry.save(function(err, savedQuestion) {
+		if (err) {
+		    console.log(err);
+  		    res.send(err);
+  		    return
+		}
+  		console.log("Added Stock Entry with id " + stockentry._id);
+	    });
+	});
+	console.log("Done!");
+	res.json({error: ""});
     });
 });
 
+router.get('/getinterval/:sym/:date/:days', function(req, res) {    
+    // convert Unixtimestamp to the api's format
+    var startDate = parseInt(req.params.date);
+    var endDate = startDate + 24*60*60* req.params.days;
+
+    StockHisto.find({symbol: req.params.sym, timestamp: {$gt: startDate, $lt: endDate}}, function(err, stocks){
+        if (err) {
+            console.log(err);
+            res.send(err);
+  	    return;
+  	}
+	
+	// Use linear regression in order to determine trend
+	var datapairs = [];
+	stocks.forEach(function(datapoint) {
+	    datapairs.push([
+		datapoint.open,
+		(new Date(datapoint.timestamp)).getTime()
+	    ]);
+	});
+
+	var regRes = regression('linear', datapairs);
+
+	res.json({
+	    slope: regRes.equation[0], 
+	    intercept: regRes.equation[1],
+	    data: stocks
+	});
+    });
+});
+
+router.get('/gethisto/:sym', function(req, res) {        
+    StockHisto.find({symbol: req.params.sym}, function(err, stocks){
+        if (err) {
+            console.log(err);
+            res.send(err);
+  	    return;
+  	}
+	
+        res.json(stocks);
+    });
+});
 
 
 app.use('/api/', router);
