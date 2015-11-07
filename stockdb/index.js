@@ -17,6 +17,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 const mongodbUri = "mongodb://localhost/fimatech";
 var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 
+var YQL = require('yql');
+
 console.log("Connect to " + mongodbUri);
 mongoose.connect(mongooseUri);
 conn = mongoose.connection;
@@ -47,6 +49,8 @@ function getHisto(sym, unix, days, callback) {
 	host: baseURL,
 	path: basePath + "symbol="+sym+"&type=minutes&startDate="+startDate+"&interval=30"
     }, function(response) {
+	console.log(this.path);
+
 	// Continuously update stream with data
 	var body = '';
 	response.on('data', function(d) {
@@ -88,8 +92,8 @@ router.get('/genStockData/:sym/:date', function(req, res) {
 	var datapairs = [];
 	d.forEach(function(datapoint) {
 	    datapairs.push([
-		datapoint.open,
-		(new Date(datapoint.timestamp)).getTime()
+		(new Date(datapoint.timestamp)).getTime(),
+		datapoint.open
 	    ]);
 	});
 
@@ -116,7 +120,8 @@ router.get('/feed/:sym/:date', function(req, res) {
 	    var stockentry = new StockHisto({
 		symbol:    req.params.sym,
 		timestamp: (new Date(datapoint.timestamp)).getTime() / 1000,
-		open:      datapoint.open
+		open:      datapoint.open,
+		source:    "Barchart"
 	    });
 
 	    stockentry.save(function(err, savedQuestion) {
@@ -125,12 +130,35 @@ router.get('/feed/:sym/:date', function(req, res) {
   		    res.send(err);
   		    return
 		}
-  		console.log("Added Stock Entry with id " + stockentry._id);
+  		console.log("[Barchart] Added Stock Entry with id " + stockentry._id);
 	    });
 	});
 	console.log("Done!");
 	res.json({error: ""});
     });
+
+    var query = new YQL('select * from yahoo.finance.historicaldata where symbol = "'+req.params.sym+'" and startDate = "2015-01-01" and endDate = "2015-11-07"');
+    query.exec(function (error, response) {
+	var d = response.query.results.quote;
+
+	d.forEach(function(datapoint) {
+	    var stockentry = new StockHisto({
+		symbol:    req.params.sym,
+		timestamp: (new Date(datapoint.Date)).getTime() / 1000,
+		open:      datapoint.Open,
+		source:    "Yahoo"
+	    });
+
+	    stockentry.save(function(err, savedQuestion) {
+		if (err) {
+		    console.log(err);
+  		    res.send(err);
+  		    return
+		}
+  		console.log("[Yahoo] Added Stock Entry with id " + stockentry._id);
+	    });
+	});
+    }); 
 });
 
 router.get('/getinterval/:sym/:date/:days', function(req, res) {    

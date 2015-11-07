@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 
 from lib import process_company
@@ -40,6 +41,8 @@ def main():
     client = MongoClient("mongodb://{host}:{port}".format(**MONGO_CONF))
     db = client[MONGO_CONF['database']]
 
+    # wipe all calculated data
+    db.newspapers.drop()
 
     for company in read_companies():
         # get data for company
@@ -51,5 +54,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
