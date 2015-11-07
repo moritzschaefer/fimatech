@@ -3,3 +3,5 @@ requests
 pandas
 numpy
 arrow
+simplejson
+newspaper3k
