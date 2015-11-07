@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="content-box">
-        <div class="box-head">Public Relation and Asset History of {{ company }} in [USD]</div>
+        <div class="box-head">Public Relation's Influence and Asset History of {{ company }} in [USD]</div>
         <div class="box-content">
           <div class="panel panel-default">
             <div class="panel-body">
@@ -69,12 +69,10 @@
         </div>
       </div>
       <div class="content-box">
-        <div class="box-head">Recent Searches</div>
-
-
-        <div class="table-row" ng-repeat="transaction in transactions | limitTo: 3">
+        <div class="box-head">Related Articles</div>
+        <div class="table-row" ng-repeat="article in articles">
           <div class="row row-parent">
-            <div class="col-xs-2" class="description">{{transaction.description}}</div>
+            <a href="{{article.url}}" class="col-xs-4" class="description" target="_blank">{{article.title}}</a>
           </div>
         </div>
       </div>

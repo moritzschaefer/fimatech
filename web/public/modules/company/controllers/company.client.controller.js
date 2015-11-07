@@ -19,16 +19,13 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
         url: 'http://fimatech.herokuapp.com/api/gethisto/'+companyMapper[$scope.company]+'/'
       };
       $http(req).then(function(response) {
-	  $scope.stockDataResponse = response.data;
-
-          if ($scope.stockDataResponse) {
-              $scope.initAssetHistory($scope.stockDataResponse);
-          }
+	       $scope.stockDataResponse = response.data;
+         $scope.selecteNewspaper('www.tmcnet.com');
       }, function(err) {
-	  console.log(err);
+	       console.log(err);
       });
 
-	    req = {        
+	    req = {
 		    method: 'GET',
 		    url: 'http://fimatech.herokuapp.com/api/newspaper/'+$scope.company+'/'
 	    };
@@ -41,68 +38,83 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
 	    }, function(err) {
 		    console.log(err);
 	    });
-		    
     };
 
 
-    $scope.initAssetHistory = function(stockData) {
-      //
-      var dataArray = [];
-      var dataLabelsArray = [];
+    $scope.selecteNewspaper = function(newspaper) {
+      // Load the newspaper data.
+      var req = {
+        method: 'GET',
+        url: 'http://fimatech.herokuapp.com/api/articles/' + $scope.company + '/' + newspaper
+      };
+      $http(req).then(function(response) {
+        $scope.articles = response.data;
 
-      // Process stock data.
-      var labelsCount = 0
-      angular.forEach(stockData, function(data) {
-        dataArray.push(data.open);
-        if (labelsCount % 30 === 0) {
-          dataLabelsArray.push(moment(data.timestamp).format('Do MMM'));
-        } else {
-          dataLabelsArray.push("")
-        }
-        labelsCount++;
+        $scope.initializeChart();
+        $scope.initializeArticles();
+      }, function(err) {
+         console.log(err);
       });
+    };
 
-      // Process news data.
+    $scope.initializeChart = function() {
+     // Data Initialization.
+     var dataArray = [];
+     var dataLabelsArray = [];
+     var newsDataArray = [];
 
+     // Process stock data.
+     var labelsCount = 0
+     angular.forEach($scope.stockDataResponse, function(data) {
+       dataArray.push(data.open);
+       if (labelsCount % 30 === 0) {
+         dataLabelsArray.push(moment(data.timestamp).format('Do MMM'));
+       } else {
+         dataLabelsArray.push("")
+       }
+       labelsCount++;
+     });
 
-      // Draw the graphs.
+     // Process news data - Iterate over data array and find fitting timeslots.
+     angular.forEach($scope.articles, function(data) {
+       console.log(moment(data.publication_timestamp).format('MMMM Do YYYY, h:mm:ss a'));
+     });
 
-      // Data chart configuration.
-      var data = {
-        labels: dataLabelsArray,
-        datasets: [
-          {
-            label: "test",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: dataArray,
-            pointDot: false
-          }, {
-            label: "test",
-            fillColor: "rgba(151,187,205,0.2)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            pointHighlightFill: "#fff",
-            pointHighlightStroke: "rgba(151,187,205,1)",
-            data: dataArray,
-            pointDot: false
-          }
-        ]
-      }
+     // Draw the graphs.
 
-      var chartCanvas = document.getElementById("canvas").getContext("2d");
-      var lineChart = new Chart(chartCanvas).Line(data, {
+     // Data chart configuration.
+     var data = {
+       labels: dataLabelsArray,
+       datasets: [
+         {
+           label: "test",
+           fillColor: "rgba(151,187,205,0.2)",
+           strokeColor: "rgba(151,187,205,1)",
+           pointColor: "rgba(151,187,205,1)",
+           pointStrokeColor: "#fff",
+           pointHighlightFill: "#fff",
+           pointHighlightStroke: "rgba(151,187,205,1)",
+           data: dataArray
+         }
+         // }, {
+         //   label: "test",
+         //   fillColor: "rgba(151,187,205,0.2)",
+         //   strokeColor: "rgba(151,187,205,1)",
+         //   pointColor: "rgba(0,0,0,0)",
+         //   pointStrokeColor: "rgba(0,0,0,0)",
+         //   pointHighlightFill: "rgba(0,0,0,0)",
+         //   pointHighlightStroke: "rgba(0,0,0,0)",
+         //   data: dataArray2,
+         // }
+       ]
+     }
 
-        showScale: true,
-        scaleLineColor: "rgba(0,0,0,.1)",
-        scaleLineWidth: 1,
-        scaleShowLabels: true,
-      });
+     var chartCanvas = document.getElementById("canvas").getContext("2d");
+     var lineChart = new Chart(chartCanvas).Line(data);
+    };
+
+    $scope.initializeArticles = function() {
+
     };
   }
 ]);

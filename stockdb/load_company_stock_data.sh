@@ -1,7 +1,11 @@
 #!/bin/bash
-
-read -p "Are you sure? You are going to wipe all stock data! [y/N]" -n 1 -r
-echo
+if [[ "$1" == "-y" ]]
+then
+  REPLY="Y"
+else
+  read -p "Are you sure? You are going to wipe all stock data! [y/N]" -n 1 -r
+  echo
+fi
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     # do dangerous stuff
@@ -23,7 +27,7 @@ then
     # call node endpoints
     while read p; do
 	p=`echo $p | awk 'BEGIN{FS=","} {print $2}'`;
-	
+
 	path='localhost:8080/api/feed/'$p'/'$timestamp;
 	echo $path
 	curl $path
