@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('search').controller('SearchController', ['$scope','$http', '$location', '$cookieStore', 'Authentication',
-  function($scope, $http, $location, $cookieStore, Authentication) {
+angular.module('search').controller('SearchController', ['$scope','$http', '$location', '$cookieStore', 'Authentication', '$state',
+  function($scope, $http, $location, $cookieStore, Authentication, $state) {
     $scope.authentication = Authentication;
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
@@ -10,7 +10,7 @@ angular.module('search').controller('SearchController', ['$scope','$http', '$loc
 
     // TODO: REST Call to receive search results dynamically.
     $scope.search = function(query) {
-      var resultList = ['BMW', 'Volkswagen'];
+      var resultList = ['BMW', 'ICBC', 'Goldman Sachs', 'Volkswagen'];
       $scope.searchResults = resultList.filter(function(searchResult) {
         return searchResult.toLowerCase().indexOf(query.toLowerCase()) > -1
       });
@@ -19,6 +19,7 @@ angular.module('search').controller('SearchController', ['$scope','$http', '$loc
     $scope.select = function(searchResult) {
 				$scope.searchValue = searchResult;
         // TODO: Change route here.
+        $state.go('users.company', {id: $scope.searchValue.toLowerCase()});
     };
   }
 ]);

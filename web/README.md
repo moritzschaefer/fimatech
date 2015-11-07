@@ -14,6 +14,13 @@ npm install
 grunt
 ```
 
+execute
+```
+sudo npm install -g glob
+sudo npm install -g minimatch
+
+```
+
 Starting the development environment:
 ```
 gulp

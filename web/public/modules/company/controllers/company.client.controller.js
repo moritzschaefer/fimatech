@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('dashboard').controller('DashboardController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication',
-  function($scope, $http, $location, $cookieStore, Authentication) {
+angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams',
+  function($scope, $http, $location, $cookieStore, Authentication, $stateParams) {
     $scope.authentication = Authentication;
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
@@ -11,6 +11,7 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$http'
     $scope.series = [series];
     $scope.data = [];
 
+    $scope.id = $stateParams.id;
 
     $scope.initDashboard = function() {
       var req = {

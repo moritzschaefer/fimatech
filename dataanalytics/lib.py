@@ -23,18 +23,19 @@ def _calculate_cc(article, stock_data):
     # TODO plot like here: http://docs.scipy.org/doc/numpy/reference/generated/numpy.linalg.lstsq.html#numpy.linalg.lstsq to control..
     return m
 
-def process_company(stock_data, articles):
+def process_company(company, stock_data, articles):
     """ Processes the articles for given company and returns a list of newspapers with according calculated values. check README.md for more information
 
+    :company: name of the company to be used
     :stock_data: stock_data for given company. format: numpy array with columns for date (timestamp) and value
     :articles: numpy array with columns ['url', 'title', 'company', 'newspaper', 'publication_timestamp'] for given !company!
-    :returns: list of newspapers with according values for max, best and worst impact
+    :returns: list of newspapers-dicts with according values for max, best and worst impact
 
     """
 
     stock_data_df = pd.DataFrame(stock_data)
     articles_df = pd.DataFrame(articles, columns=['url', 'title', 'company', 'newspaper', 'publication_timestamp'])
-    articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(article, stock_data), axis=1)
+    articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(articles_df, stock_data_df), axis=1)
     newspapers = pd.DataFrame(columns=['newspaper', 'max_impact', 'best_impact', 'worst_impact'])
     for newspaper, group in articles_df.groupby('newspaper'):
         # TODO: maybe calculate best and worst differently (without filtering, square without losing sign)
@@ -45,8 +46,9 @@ def process_company(stock_data, articles):
             'newspaper': newspaper,
             'best_impact': best_impact,
             'worst_impact': worst_impact,
-            'max_impact': max_impact
+            'max_impact': max_impact,
+            'company': company
             }))
 
-    return newspapers
+    return list(newspapers.apply(lambda s: s.to_dict()))
 

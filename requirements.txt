@@ -2,4 +2,4 @@ pymongo
 requests
 pandas
 numpy
-
+arrow
