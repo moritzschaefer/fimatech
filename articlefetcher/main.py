@@ -2,12 +2,13 @@ import urllib
 import logging
 import json
 import sys
+import random
 
 import requests
 from pymongo import MongoClient
 import arrow
 
-from conf import ALCHEMY_API_KEY, MONGO_CONF_FILE, BASE_QUERY, COMPANIES_CSV
+from conf import ALCHEMY_API_KEYS, MONGO_CONF_FILE, BASE_QUERY, COMPANIES_CSV
 
 # get list of companies
 #
@@ -39,7 +40,12 @@ def pull_company_articles(company):
     :returns: list of article objects
 
     """
-    formatted_query = BASE_QUERY.format(apikey=ALCHEMY_API_KEY, company=urllib.parse.quote_plus(company))
+
+    while True:
+        random.choice(ALCHEMY_API_KEYS)
+
+
+    formatted_query = BASE_QUERY.format(apikey=ALCHEMY_API_KEYS, company=urllib.parse.quote_plus(company))
     logging.debug('Fetching URL: {}'.format(formatted_query))
 
 
@@ -74,7 +80,7 @@ def prepare_articles(company, articles):
         try:
             data = article['source']['enriched']['url']
         except KeyError as e:
-            if 'enriched' in e.message:
+            if 'enriched' in str(e):
                 import ipdb; ipdb.set_trace()
             else:
                 print('API Error: {}'.format(e))
