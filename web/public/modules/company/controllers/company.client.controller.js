@@ -51,7 +51,6 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
         $scope.articles = response.data;
 
         $scope.initializeChart();
-        $scope.initializeArticles();
       }, function(err) {
          console.log(err);
       });
@@ -113,8 +112,8 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
      var lineChart = new Chart(chartCanvas).Line(data);
     };
 
-    $scope.initializeArticles = function() {
-
+    $scope.dateForArticle = function(article) {
+      return moment(article.publication_timestamp, 'X').format('MMMM Do YYYY, h:mm:ss a')
     };
 
     $scope.exportAsPDF = function() {
