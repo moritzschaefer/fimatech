@@ -30,6 +30,8 @@ then
 	echo
     done <../shared/companies.csv
 
+    sleep 30
+
     kill $pid
 
 fi
