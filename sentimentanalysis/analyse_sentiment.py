@@ -1,8 +1,9 @@
 import logging
 from simplejson import loads
 from urllib import request, parse
+import urllib
 #pip3 install newspaper3k
-from newspaper import Article
+from newspaper import Article, article
 HAVEN_API_KEY = "e3118bd3-75ea-4d29-ad0e-81bcfe4850c4"
 HAVEN_BASE_URL = "https://api.havenondemand.com/1/api/sync/analyzesentiment/v1?text={text}&apikey={apikey}"
 
@@ -28,11 +29,15 @@ def get_bias(sentiment_data_list):
     for i in range(len(sentiment_data_list)):
         bias.append( sentiment_data_list[i]['aggregate']['score'])
     return bias
-    
+
 #Just need to run this function
 def format_article(url):
-    text = get_article_data(url)
-    sentiments = get_sentiment_data(text)
+    try:
+        text = get_article_data(url)
+        sentiments = get_sentiment_data(text)
+    except (article.ArticleException, urllib.error.HTTPError):
+        raise RuntimeError('Error fetching article')
+
     bias = get_bias(sentiments)
     rms_bias = 0
     for i in bias:
@@ -41,7 +46,7 @@ def format_article(url):
     rms_bias = rms_bias ** 0.5
 
     formatted_article = ""
-    
+
     for i in range(len(bias)):
         if bias[i] > rms_bias:
             formatted_article += "\n[["+text[i]+"]]\n"

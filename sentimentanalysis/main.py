@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import json
 import logging
 
@@ -19,10 +20,15 @@ def main():
     articles = db.articles.find({'sentiment_text': {'$exists': False}})
 
     for article in articles:
-        sentiment_text = format_article(article['url'])
-        if not db.articles.update({'_id': article['_id']}, {'$set': {'sentiment_text': sentiment_text}}):
-            logging.warn('Couldn\'t update article with id {}'.format(article['_id']))
+        try:
+            sentiment_text = format_article(article['url'])
+        except RuntimeError:
+            logging.fatal('Couldnt get sentiment for url {}'.format(article['url']))
+            continue
+        else:
+            if not db.articles.update({'_id': article['_id']}, {'$set': {'sentiment_text': sentiment_text}}):
+                logging.warn('Couldn\'t update article with id {}'.format(article['_id']))
 
 if __name__ == '__main__':
-    logging.baseConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO)
     main()
