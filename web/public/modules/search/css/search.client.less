@@ -1,4 +1,61 @@
+@colorWhite: #ffffff;
+
 #company-search {
   width: 60%;
-  height: 48px;
+  vertical-align: middle;
+  margin-top:14px;
+  line-height: 120%;
+}
+
+#search-module {
+    background: url('../modules/search/img/search-background.jpg');
+    background-size: cover;
+    height: 600px;
+    padding-top: 160px;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    .input-group {
+        max-width: 500px;
+        margin: 20px auto 50px;
+        border: none;
+        .form-control, .btn {
+            background-color: #ffffff;
+            border: none;
+            padding-left: 15px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 18px;
+            box-shadow: none;
+        }
+        .form-control:focus {
+            box-shadow: none;
+        }
+        .btn {
+            line-height: 40px;
+            padding-right: 15px;
+            color: #888888;
+            border-bottom-right-radius: 2px;
+            border-top-right-radius: 2px;
+        }
+        .btn:hover,
+        .btn:focus,
+        .btn:active {
+            color: #e6e6e6;
+        }
+        .btn:before {
+            position: absolute;
+            content: '';
+            left: 1px;
+            top: 10px;
+            height: 30px;
+            width: 1px;
+            background-color: #e6e6e6;
+        }
+    }
+}
+
+.company-search-button {
+  width: 14%;
 }

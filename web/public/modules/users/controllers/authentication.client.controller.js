@@ -41,7 +41,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$cook
       $http(req).then(function(response) {
         $scope.authentication.user = response.data;
         $cookieStore.put('user', $scope.authentication.user);
-        $location.path('/users/dashboard')
+        $location.path('/search')
 
           // Hide all Modal Views.
         ModalService.hideModal();
@@ -65,7 +65,7 @@ angular.module('users').controller('AuthenticationController', ['$scope', '$cook
         };
 
         $cookieStore.put('user', $scope.authentication.user);
-        $location.path('/users/dashboard')
+        $location.path('/search')
         /***********************************/
         /***********************************/
         /***********************************/
