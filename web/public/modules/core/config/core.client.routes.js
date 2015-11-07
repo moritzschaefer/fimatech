@@ -22,7 +22,7 @@ angular.module('core').run(['$rootScope', '$state', 'Authentication',
       if (Authentication.user) {
           if (toState.name === 'home') {
             event.preventDefault();
-            $state.go('users.dashboard');
+            $state.go('users.search');
           }
       }
     });

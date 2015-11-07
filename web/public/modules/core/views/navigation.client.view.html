@@ -8,7 +8,7 @@
     </button>
   </div>
   <div class="collapse navbar-collapse" id="navbar-authentication" collapse="!isCollapsed" role="navigation">
-    <a ui-sref="users.dashboard" class="navbar-brand">
+    <a ui-sref="search" class="navbar-brand">
       <img ng-src="modules/core/img/logo/fimatec.png" alt="fimatec" width="164" height="37">
 
         </a>
@@ -37,9 +37,6 @@
             <a ui-sref="users.dashboard">Dashboard</a>
           </li>
           <li ui-sref-active="active" data-ng-show="authentication.user.isActive">
-            <a ui-sref="users.transactionsPrivate">Transactions</a>
-          </li>
-          <li ui-sref-active="active" data-ng-show="authentication.user.isActive">
             <a ui-sref="users.profilePrivate">Profile</a>
           </li>
           <li class="divider"></li>
@@ -60,9 +57,6 @@
         </li>
         <li ui-sref-active="active" data-ng-show="authentication.user.isActive">
           <a ui-sref="users.dashboard">Dashboard</a>
-        </li>
-        <li ui-sref-active="active" data-ng-show="authentication.user.isActive">
-          <a ui-sref="users.transactionsPrivate">Transactions</a>
         </li>
         <li ui-sref-active="active" data-ng-show="authentication.user.isActive">
           <a ui-sref="users.profilePrivate">Profile</a>

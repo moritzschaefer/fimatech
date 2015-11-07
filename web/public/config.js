@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'fimatec';
-	var applicationModuleVendorDependencies = ['chart.js', 'ngResource', 'ngCookies',  'ngAnimate',  'ngTouch', 'ngSanitize', 'ngRetina', 'ui.router', 'ui.bootstrap', 'ui.utils', 'pascalprecht.translate', 'mgcrea.ngStrap'];
+	var applicationModuleVendorDependencies = ['chart.js', 'ngResource', 'ngCookies',  'ngAnimate',  'ngTouch', 'ngSanitize', 'ngRetina', 'ui.router', 'ui.bootstrap', 'ui.utils', 'pascalprecht.translate', 'mgcrea.ngStrap.typeahead'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {

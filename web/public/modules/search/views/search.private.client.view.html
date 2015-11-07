@@ -1,23 +1,17 @@
-<section data-ng-controller="SearchController" class="users">
-  <div class="container">
-    <div class="content-full">
-      <div class="content-box">
-        <div class="box-head">Search</div>
-        <div class="box-content">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <div class="chart-container">
-                <div class="form-group">
-                  <label><i class="fa fa-globe"></i>Companies</label>
-                  <form class="form-inline" role="form">
-                    <input name="search" class="form-control" ng-enter="select(searchValue)" type="text" placeholder="Type in your company..." ng-model="searchValue" data-trim-value="false" ng-trim="false" data-animation="am-flip-x"  bs-options="display_name as display_name for searchResult in search($viewValue)" data-template-url="modules/search/views/searchbar-template.client.view.html" autocomplete="off" bs-typeahead>
-                  </form
-                </div>
-              </div>
-            </div>
+<div id="home" data-ng-controller="SearchController" >
+    <section id="home-search">
+        <div class="container">
+          <div class="row">
+            <h2 class="text-main col-sm-12 text-center">
+                Type in your company
+            </h2>
           </div>
+          <div class="row col-sm-12 text-center margin-top-20">
+            <form class="form-inline" role="form">
+              <input id="company-search" name="search" class="form-control" ng-enter="select(searchValue)" type="text" placeholder="Type in your company..." ng-model="searchValue" data-trim-value="false" ng-trim="false" data-animation="am-flip-x"  bs-options="display_name as display_name for searchResult in search($viewValue)" data-template-url="modules/search/views/searchbar-template.client.view.html" autocomplete="off" bs-typeahead>
+            </form
+          </div>
+
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
+</div>
