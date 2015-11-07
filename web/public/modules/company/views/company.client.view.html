@@ -1,8 +1,15 @@
-<section data-ng-controller="CompanyController" class="users" data-ng-init="initCompanyData()">
+<section data-ng-controller="CompanyController" class="users pdf-printable" data-ng-init="initCompanyData()">
   <div class="container">
     <div class="content-full">
       <div class="content-box">
-        <div class="box-head"></div>
+        <div class="box-head">
+
+            <div class="pull-left">Impact Grid</div>
+            <div class="pull-right">
+              <a ng-click="exportAsPDF();" class="btn btn-primary pull-right">PDF Export</a>
+            </div>
+
+        </div>
         <div class="box-content" style="overflow: auto;">
 
 	  <div style="float: left; width: 30%;">
@@ -69,7 +76,9 @@
         </div>
       </div>
       <div class="content-box">
-        <div class="box-head">Related Articles</div>
+        <div class="box-head">
+            <div class="pull-left">Related Articles</div>
+        </div>
         <div class="table-row" ng-repeat="article in articles">
           <div class="row row-parent">
             <a href="{{article.url}}" class="col-xs-4" class="description" target="_blank">{{article.title}}</a>

@@ -116,5 +116,18 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
     $scope.initializeArticles = function() {
 
     };
+
+    $scope.exportAsPDF = function() {
+      // Hack to make all Charts accessable for rendering
+      var item = angular.element(document.querySelectorAll('.pdf-printable'));
+      html2canvas(item).then(function(canvas) {
+          var dataURL = canvas.toDataURL({format: 'jpeg', quality: 1.0});
+          var doc = new jsPDF();
+          doc.text(35, 25, "Influence of '" + $scope.newspaper + "' on '" + $scope.company + "'.pdf");
+
+          doc.addImage(dataURL, 'jpeg', 0, 30);
+          doc.save("Influence of '" + $scope.newspaper + "' on '" + $scope.company + "'.pdf");
+      });
+    };
   }
 ]);
