@@ -36,6 +36,10 @@ def get_articles(db, company):
 def put_newspaper_data(db, company, newspapers_data):
     results = db.newspapers.insert_many(newspapers_data)
 
+def update_article_ccs(db, articles_df):
+    for index, item in articles_df.iterrows():
+        db.article.update({'_id': item['_id']}, {'$set': {'score': item['cc']}})
+
 
 def main():
     # TODO get data from library one company at a time, do data processing and write data to the mongodb
@@ -51,12 +55,13 @@ def main():
         articles = get_articles(db, company)
 
         try:
-            newspapers_data = process_company(company, stock_data, articles)
+            newspapers_data, articles_df = process_company(company, stock_data, articles)
         except ValueError as e:
             logging.fatal('ValueError: {}: {}'.format(company, e))
             continue
         else:
             put_newspaper_data(db, company, newspapers_data)
+            update_article_ccs(db, articles_df)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
