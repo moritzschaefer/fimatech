@@ -14,6 +14,7 @@
     "moment": "^2.10.6",
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.2.4",
-    "regression": "^1.2.1"
+    "regression": "^1.2.1",
+    "yql": "^1.0.2"
   }
 }
