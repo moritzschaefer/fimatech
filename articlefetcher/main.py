@@ -45,7 +45,6 @@ def pull_company_articles(company):
     # TODO: use "next" parameter to add more values
 
     response = requests.get(formatted_query).json()
-    import ipdb; ipdb.set_trace()
     return response['result']['docs']
 
 def prepare_articles(company, articles):
@@ -105,4 +104,5 @@ def main():
         put_company_articles(company, prepared_articles)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     main()
