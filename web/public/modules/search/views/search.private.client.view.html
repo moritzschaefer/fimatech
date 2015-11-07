@@ -10,7 +10,7 @@
                 <div class="form-group">
                   <label><i class="fa fa-globe"></i>Companies</label>
                   <form class="form-inline" role="form">
-                    <input name="search" class="form-control" type="text" placeholder="Type in your company..." ng-model="searchValue" data-trim-value="false" ng-trim="false" data-animation="am-flip-x"  bs-options="display_name as display_name for searchResult in search($viewValue)" data-template-url="modules/search/views/searchbar-template.client.view.html" autocomplete="off" bs-typeahead>
+                    <input name="search" class="form-control" ng-enter="select(searchValue)" type="text" placeholder="Type in your company..." ng-model="searchValue" data-trim-value="false" ng-trim="false" data-animation="am-flip-x"  bs-options="display_name as display_name for searchResult in search($viewValue)" data-template-url="modules/search/views/searchbar-template.client.view.html" autocomplete="off" bs-typeahead>
                   </form
                 </div>
               </div>
