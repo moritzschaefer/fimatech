@@ -92,7 +92,7 @@ def put_company_articles(company, articles):
     with open(MONGO_CONF_FILE) as f:
         mongo_conf = json.load(f)
     client = MongoClient("mongodb://{host}:{port}".format(**mongo_conf))
-    db = client[MONGO_CONF['database']]
+    db = client[mongo_conf['database']]
 
     results = db.articles.insert_many(articles)
 
