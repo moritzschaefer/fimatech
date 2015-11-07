@@ -3,21 +3,57 @@
     <div class="content-full">
       <div class="content-box">
         <div class="box-head"></div>
-        <div class="box-content">
-	  Best Impact:
-	  <div ng-repeat="b in best">
-	    {{b.newspaper}}: {{b.best_impact}}
+        <div class="box-content" style="overflow: auto;">
+
+	  <div style="float: left; width: 30%;">
+	    <h3>Best Impact:</h3>
+	    <ul class="list img-list">
+              <li ng-repeat="b in best">
+		<a href="#" class="inner">
+		  <div class="li-text">
+		    <h5>{{b.newspaper}}</h5>
+		  </div>
+		  <div class="li-text right">
+		    <h3>{{b.best_impact}}</h3>
+		  </div>
+		</a>
+              </li>
+	    </ul>
 	  </div>
-	  <br />
-	  Max Impact:
-	  <div ng-repeat="b in max">
-	    {{b.newspaper}}: {{b.best_impact}}
+
+	  <div style="float: left; width: 30%;">
+	    <h3>Max Impact:</h3>
+	    <ul class="list img-list">
+              <li ng-repeat="b in max">
+		<a href="#" class="inner">
+		  <div class="li-text">
+		    <h5>{{b.newspaper}}</h5>
+		  </div>
+		  <div class="li-text right">
+		    <h3>{{b.best_impact}}</h3>
+		  </div>
+		</a>
+              </li>
+	    </ul>
 	  </div>
-	  <br />
-	  Worst Impact:
-	  <div ng-repeat="b in worse">
-	    {{b.newspaper}}: {{b.best_impact}}
+
+
+	  <div style="float: left; width: 30%;">
+	    <h3>Worst Impact:</h3>
+	    <ul class="list img-list">
+              <li ng-repeat="b in worst">
+		<a href="#" class="inner">
+		  <div class="li-text">
+		    <h5>{{b.newspaper}}</h5>
+		  </div>
+		  <div class="li-text">
+		    <h3>{{b.best_impact}}</h3>
+		  </div>
+		</a>
+              </li>
+	    </ul>
 	  </div>
+
         </div>
       </div>
       <div class="content-box">
