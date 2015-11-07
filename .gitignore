@@ -1,2 +1,4 @@
 __pycache__/
 stockdb/node_modules
+*.pyc
+*~

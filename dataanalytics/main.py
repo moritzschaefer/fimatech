@@ -9,7 +9,7 @@ COMPANIES_CSV = '../shared/companies.csv'
 
 def read_companies(companies_file = COMPANIES_CSV):
     with open(companies_file) as f:
-        return [s.strip() for s in f.readlines()]
+        return [s.strip().split(',')[0] for s in f.readlines()]
 
 def get_stock_data(db, company):
     """ Returns from mongodb
