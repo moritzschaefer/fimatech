@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import urllib
 import logging
 import json
@@ -40,28 +41,43 @@ def pull_company_articles(company):
     :returns: list of article objects
 
     """
-
-    while True:
-        random.choice(ALCHEMY_API_KEYS)
-
-
-    formatted_query = BASE_QUERY.format(apikey=ALCHEMY_API_KEYS, company=urllib.parse.quote_plus(company))
-    logging.debug('Fetching URL: {}'.format(formatted_query))
-
-
-
-    # TODO: use "next" parameter to add more values
-
-
-    response = requests.get(formatted_query).json()
-    with open('raw_{}.json'.format(arrow.now().timestamp), 'w') as f:
-        json.dump(response, f)
-
+    MAX_COUNT = 5  # go to conf
+    WISH_COUNT = 3
+    positive_count, total_count = 0, 0
     try:
-        return response['result']['docs']
-    except KeyError as e:
-        print('API Error: {}'.format(e))
-        sys.exit(1)
+        del value_next
+    except UnboundLocalError:
+        pass
+    docs = []
+
+    while positive_count < WISH_COUNT and total_count < MAX_COUNT:
+        apikey = random.choice(ALCHEMY_API_KEYS)
+        formatted_query = BASE_QUERY.format(apikey=apikey, company=urllib.parse.quote_plus(company))
+        try:
+            formatted_query_next = formatted_query + '&next={}'.format(value_next)
+        except UnboundLocalError:
+            formatted_query_next = formatted_query
+        response = requests.get(formatted_query_next).json()
+
+        try:
+            docs.extend(response['result']['docs'])
+        except KeyError:
+            logging.info('Didn\'t succeed fetching URL')
+            pass
+        else:
+            logging.info('Succeeded fetching URL')
+            positive_count += 1
+            try:
+                value_next = response['result']['next']
+            except KeyError:
+                logging.warn('API ran out of value for company {}'.format(company))
+                return docs
+
+            with open('raw_{}.json'.format(arrow.now().timestamp), 'w') as f:
+                json.dump(response, f)
+        total_count += 1
+
+    return docs
 
 def prepare_articles(company, articles):
     """ Prepare object array so it can be put into mongodb directly
@@ -80,10 +96,8 @@ def prepare_articles(company, articles):
         try:
             data = article['source']['enriched']['url']
         except KeyError as e:
-            if 'enriched' in str(e):
-                import ipdb; ipdb.set_trace()
-            else:
-                print('API Error: {}'.format(e))
+            logging.warn('API Error. Missing data: {}'.format(e))
+            return None
         try:
             publication_date = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
         except Exception: # ParserError: # TODO: find import..
@@ -99,7 +113,7 @@ def prepare_articles(company, articles):
 
     # TODO should we filter out values (for example the ones without publicationDate)??
 
-    return [prepare_article(company, article) for article in articles]
+    return filter(None, [prepare_article(company, article) for article in articles])
 
 
 def put_company_articles(company, articles):
