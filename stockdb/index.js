@@ -12,6 +12,7 @@ var basePath = '/getHistory.json?key=5e0a5a18efcafd37d8495839faed111b&';
 
 var http = require('http');
 var moment = require('moment');
+var regression = require('regression');
 
 function getHisto(sym, unix, days, callback) {
     var u = parseInt(unix);
@@ -49,17 +50,39 @@ function getHisto(sym, unix, days, callback) {
     });
 }
 
+// For Analysis
 var router = express.Router();
-router.get('/genStockData/:sym/:date', function(req, res) {
-    
+router.get('/genStockData/:sym/:date', function(req, res) {    
     // convert Unixtimestamp to the api's format
     var unix = req.params.date;
+
+    // for debugging
+    if (unix == "now") {
+	unix = Math.floor(Date.now() / 1000); // Get current timestamp
+    }
     
     getHisto(req.params.sym, unix, 2, function(d) {
-	res.json({error: "", results: d});
+	
+	// Use linear regression in order to determine trend
+	var datapairs = [];
+	d.forEach(function(datapoint) {
+	    datapairs.push([
+		datapoint.open,
+		(new Date(datapoint.timestamp)).getTime()
+	    ]);
+	});
+
+	var regRes = regression('linear', datapairs);
+
+	res.json({
+	    slope: regRes.equation[0], 
+	    intercept: regRes.equation[1],
+	    detail: regRes
+	});
     });
 });
 
+// FOR UI
 router.get('/gethisto/:sym/:date', function(req, res) {
     
     // convert Unixtimestamp to the api's format
