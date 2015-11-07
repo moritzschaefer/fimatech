@@ -19,7 +19,7 @@ angular.module('search').controller('SearchController', ['$scope','$http', '$loc
     $scope.select = function(searchResult) {
 				$scope.searchValue = searchResult;
         // TODO: Change route here.
-        $state.go('users.dashboard.company', {id: $scope.searchValue});
+        $state.go('users.dashboard', {id: $scope.searchValue});
     };
   }
 ]);

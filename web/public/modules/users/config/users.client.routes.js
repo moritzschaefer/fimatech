@@ -59,7 +59,7 @@ angular.module('users').run(['$rootScope', '$state', 'Authentication',
           $state.go('/');
         } else if (toState.name === 'users.profilePrivate') {
           event.preventDefault();
-          $state.go('users.profilePrivate.contract');
+          $state.go('users.profilePrivate.home');
         }
       }
     });
