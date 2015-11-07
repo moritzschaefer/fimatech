@@ -63,9 +63,9 @@ def prepare_articles(company, articles):
     def prepare_article(company, article):
         data = article['source']['enriched']['url']
         try:
-            publication_timestamp = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
+            publication_date = arrow.get(data['publicationDate']['date'], 'YYYYMMDDTHHmmss')
         except Exception: # ParserError: # TODO: find import..
-            publication_timestamp = arrow.get(article['timestamp'])
+            publication_date = arrow.get(article['timestamp'])
 
         return {
                 'url': data['url'],
