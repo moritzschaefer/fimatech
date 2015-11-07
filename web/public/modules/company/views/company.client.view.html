@@ -4,7 +4,20 @@
       <div class="content-box">
         <div class="box-head"></div>
         <div class="box-content">
-
+	  Best Impact:
+	  <div ng-repeat="b in best">
+	    {{b.newspaper}}: {{b.best_impact}}
+	  </div>
+	  <br />
+	  Max Impact:
+	  <div ng-repeat="b in max">
+	    {{b.newspaper}}: {{b.best_impact}}
+	  </div>
+	  <br />
+	  Worst Impact:
+	  <div ng-repeat="b in worse">
+	    {{b.newspaper}}: {{b.best_impact}}
+	  </div>
         </div>
       </div>
       <div class="content-box">

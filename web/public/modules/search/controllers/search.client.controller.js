@@ -10,15 +10,16 @@ angular.module('search').controller('SearchController', ['$scope','$http', '$loc
 
     // TODO: REST Call to receive search results dynamically.
     $scope.search = function(query) {
-      var resultList = ['BMW', 'ICBC', 'Goldman Sachs', 'Volkswagen'];
+      var resultList = ['Apple', 'IBM', 'Goldman Sachs', 'Volkswagen'];
       $scope.searchResults = resultList.filter(function(searchResult) {
         return searchResult.toLowerCase().indexOf(query.toLowerCase()) > -1
       });
     };
 
+    $scope.companyMapper = {'Apple': 'AAPL', 'IBM': 'IBM', 'Goldman Sachs': 'GS', 'Volkswagen': 'VLKAY'}
+
     $scope.select = function(searchResult) {
-				$scope.searchValue = searchResult;
-        // TODO: Change route here.
+	$scope.searchValue = searchResult;
         $state.go('users.company', {id: $scope.searchValue});
     };
   }
