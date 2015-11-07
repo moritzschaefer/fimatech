@@ -28,7 +28,7 @@ def get_companies(filename=COMPANIES_CSV):
     with open(filename) as f:
         companies = f.readlines()
 
-    return [company.strip() for company in companies]
+    return [company.strip().split(',')[0] for company in companies]
 
 def pull_company_articles(company):
     """ Pulls article from alchemyAPI

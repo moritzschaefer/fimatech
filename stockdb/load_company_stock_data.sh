@@ -10,7 +10,7 @@ then
     timestamp=1420070400     #timestap of Jan 1, 2015
 
     # kill all node instances brutally
-    sudo killall node
+    killall node
 
     # start new node instance and save pid
     node index.js&
@@ -22,6 +22,8 @@ then
 
     # call node endpoints
     while read p; do
+	p=`echo $p | awk 'BEGIN{FS=","} {print $2}'`;
+	
 	path='localhost:8080/api/feed/'$p'/'$timestamp;
 	echo $path
 	curl $path
