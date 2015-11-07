@@ -33,6 +33,13 @@ conn.on('connected', function() {
     // @todo start all the database stuff asynchronously
 });
 
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
+  next();
+});
+
+
 var StockHisto = require('./models/stockhisto')
 var Newspaper = require('./models/newspaper')
 var Article = require('./models/article')
@@ -163,6 +170,8 @@ router.get('/feed/:sym/:date', function(req, res) {
     }); 
 });
 
+
+/// @deprecated by python code
 router.get('/getinterval/:sym/:date/:days', function(req, res) {    
     // convert Unixtimestamp to the api's format
     var startDate = parseInt(req.params.date);
@@ -207,14 +216,44 @@ router.get('/gethisto/:sym', function(req, res) {
 });
 
 router.get('/newspaper/:company', function(req, res) {
-    Newspaper.find({company: req.params.company}, function(err, element) {	
+    var result = {}
+
+    // @note wowo such a call back hell
+    function getBest() { 
+	Newspaper.find({company: req.params.company}).sort({'best_impact': -1}).limit(5).exec(function(err, elements) {
+	    if (err) {
+		console.log(err);
+		res.send(err);
+  		return;
+  	    }
+	    
+            result.best_impact = elements;
+	    res.json(result);
+	});
+    }
+    
+    function getWorse() {
+	Newspaper.find({company: req.params.company}).sort({'worse_impact': -1}).limit(5).exec(function(err, elements) {
+	    if (err) {
+		console.log(err);
+		res.send(err);
+  		return;
+  	    }
+	    
+            result.worse_impact = elements;
+	    getBest();
+	});
+    }
+
+    Newspaper.find({company: req.params.company}).sort({'max_impact': -1}).limit(5).exec(function(err, elements) {
 	if (err) {
             console.log(err);
             res.send(err);
   	    return;
   	}
 	
-        res.json(element);
+        result.max_impact = elements;
+	getWorse();
     });
 });
 
