@@ -14,7 +14,7 @@ var uriUtil = require('mongodb-uri');
 var mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
 
-const mongodbUri = "mongodb://localhost/fimatech";
+var mongodbUri = process.env.MONGOLAB_URI || "mongodb://localhost/fimatech";
 var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 
 var YQL = require('yql');
@@ -34,6 +34,8 @@ conn.on('connected', function() {
 });
 
 var StockHisto = require('./models/stockhisto')
+var Newspaper = require('./models/newspaper')
+var Article = require('./models/article')
 
 var http = require('http');
 var moment = require('moment');
@@ -204,6 +206,30 @@ router.get('/gethisto/:sym', function(req, res) {
     });
 });
 
+router.get('/newspaper/:company', function(req, res) {
+    Newspaper.find({company: req.params.company}, function(err, element) {	
+	if (err) {
+            console.log(err);
+            res.send(err);
+  	    return;
+  	}
+	
+        res.json(element);
+    });
+});
+
+
+router.get('/articles/:company/:newspaper', function(req, res) {
+    Article.find({company: req.params.company, newspaper: req.params.newspaper}, function(err, elements) {	
+	if (err) {
+            console.log(err);
+            res.send(err);
+  	    return;
+  	}
+	
+        res.json(elements);
+    });
+});
 
 app.use('/api/', router);
 app.listen(port);

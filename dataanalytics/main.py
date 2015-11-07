@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json
+import logging
 
 from lib import process_company
 
@@ -15,13 +16,13 @@ with open(MONGO_CONF_FILE) as f:
 
 def read_companies(companies_file = COMPANIES_CSV):
     with open(companies_file) as f:
-        return [s.strip().split(',')[0] for s in f.readlines()]
+        return [s.strip().split(',') for s in f.readlines()]
 
-def get_stock_data(db, company):
+def get_stock_data(db, symbol):
     """ Returns from mongodb
     :returns: stock_data for given company. format: numpy array with columns for date (timestamp) and value
     """
-    return list(db.stockhistos.find({'symbol': company}))
+    return list(db.stockhistos.find({'symbol': symbol}))
 
 def get_articles(db, company):
     """ Return articles as numpy array from mongodb
@@ -44,14 +45,20 @@ def main():
     # wipe all calculated data
     db.newspapers.drop()
 
-    for company in read_companies():
+    for company, symbol in read_companies():
         # get data for company
-        stock_data = get_stock_data(db, company)
+        stock_data = get_stock_data(db, symbol)
         articles = get_articles(db, company)
 
-        newspapers_data = process_company(company, stock_data, articles)
-        put_newspaper_data(db, company, newspapers_data)
+        try:
+            newspapers_data = process_company(company, stock_data, articles)
+        except ValueError as e:
+            logging.fatal('ValueError: {}: {}'.format(company, e))
+            continue
+        else:
+            put_newspaper_data(db, company, newspapers_data)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     main()
 
