@@ -213,7 +213,7 @@ router.get('/gethisto/:sym', function(req, res) {
             res.send(err);
   	    return;
   	}
-	
+
         res.json(stocks);
     });
 });
@@ -262,14 +262,25 @@ router.get('/newspaper/:company', function(req, res) {
 
 
 router.get('/articles/:company/:newspaper', function(req, res) {
-    Article.find({company: req.params.company, newspaper: req.params.newspaper}, function(err, elements) {	
+    Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': 1}).limit(10).exec(function(err, elements) {	
 	if (err) {
             console.log(err);
             res.send(err);
   	    return;
   	}
-	
-        res.json(elements);
+
+	var result = [];
+	result = result.concat(result, elements);
+
+	Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': 1}).limit(10).exec(function(err, elements2) {	
+	    if (err) {
+		console.log(err);
+		res.send(err);
+  		return;
+  	    }
+	    result = result.concat(result, elements2);
+	    res.json(result);
+	});
     });
 });
 
