@@ -16,9 +16,9 @@
 	    <h3>Max Impact:</h3>
 	    <br />
 	    <ul class="list img-list">
-              <li ng-repeat="b in max">
+        <li ng-repeat="b in max">
 		  <div class="li-text left">
-		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		    <a ng-click="selectNewspaper(b.newspaper)" class="inner">
 		      {{b.newspaper}}
 		    </a>
 		  </div>
@@ -36,7 +36,7 @@
 	    <ul class="list img-list">
               <li ng-repeat="b in best">
 		  <div class="li-text left">
-		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		    <a ng-click="selectNewspaper(b.newspaper)" class="inner">
 		      {{b.newspaper}}
 		    </a>
 		  </div>
@@ -54,7 +54,7 @@
 	    <ul class="list img-list">
               <li ng-repeat="b in worse">
 		  <div class="li-text left">
-		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		    <a ng-click="selectNewspaper(b.newspaper)" class="inner">
 		      {{b.newspaper}}
 		    </a>
 		  </div>
@@ -93,14 +93,11 @@
                 <li ng-class="{active: tab == 'title'}">
                   <a ng-click="orderByTitle()">Title</a>
                 </li>
-                <li ng-class="{active: tab == 'maxImpact'}">
-                  <a ng-click="orderByMaxImpact()">Maximum Impact</a>
+                <li ng-class="{active: tab == 'maxScore'}">
+                  <a ng-click="orderByMaxScore()">Maximum Score</a>
                 </li>
-                <li ng-class="{active: tab == 'bestImpact'}">
-                  <a ng-click="orderByBestImpact()">Best Impact</a>
-                </li>
-                <li ng-class="{active: tab == 'worstImpact'}">
-                  <a ng-click="orderByWorstImpact()">Worst Impact</a>
+                <li ng-class="{active: tab == 'minScore'}">
+                  <a ng-click="orderByMinScore()">Minimum Score</a>
                 </li>
               </ul>
             </div>

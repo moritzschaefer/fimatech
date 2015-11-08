@@ -1,5 +1,7 @@
 'use strict';
 
+var BASE_URL = 'http://localhost:8080/api/';
+
 angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
   function($scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
     $scope.authentication = Authentication;
@@ -19,18 +21,17 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
 
       var req = {
         method: 'GET',
-        url: 'http://fimatech.herokuapp.com/api/gethisto/'+companyMapper[$scope.company]+'/'
+        url: BASE_URL + 'gethisto/'+companyMapper[$scope.company]+'/'
       };
       $http(req).then(function(response) {
 	       $scope.stockDataResponse = response.data;
-         $scope.selectNewspaper('www.tmcnet.com');
       }, function(err) {
 	       console.log(err);
       });
 
 	    req = {
 		    method: 'GET',
-		    url: 'http://fimatech.herokuapp.com/api/newspaper/'+$scope.company+'/'
+		    url: BASE_URL + 'newspaper/'+$scope.company+'/'
 	    };
 
 
@@ -45,10 +46,11 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
 
 
     $scope.selectNewspaper = function(newspaper) {
+
       // Load the newspaper data.
       var req = {
         method: 'GET',
-        url: 'http://fimatech.herokuapp.com/api/articles/' + $scope.company + '/' + newspaper
+        url: BASE_URL + 'articles/' + $scope.company + '/' + newspaper
       };
       $http(req).then(function(response) {
         $scope.articles = response.data;
@@ -72,9 +74,21 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
      var newsDataArray = [];
 
      // Process stock data.
-     var labelsCount = 0
+     var labelsCount = 0;
+     var minData = null;
+     var maxData = null;
+
      angular.forEach($scope.stockDataResponse, function(data) {
        dataArray.push(data.open);
+
+       if (!minData || minData > data.open) {
+         minData = data.open;
+       }
+
+       if (!maxData || maxData < data.open) {
+         maxData = data.open;
+       }
+
        if (labelsCount % 30 === 0) {
          dataLabelsArray.push(moment(data.timestamp, 'X').format('Do MMM'));
        } else {
@@ -83,9 +97,28 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
        labelsCount++;
      });
 
-     // Process news data - Iterate over data array and find fitting timeslots.
-     angular.forEach($scope.articles, function(data) {
+     // Add treshold.
+     minData = minData - 30.0;
+     maxData = maxData + 30.0;
 
+     // Process news data - Iterate over data array and find fitting timeslots.
+     $scope.articles.sort(function(prev, curr) {
+       return prev.publication_timestamp - curr.publication_timestamp;
+     });
+
+     // TODO: Deuglify.
+     var iterator = 0;
+     angular.forEach($scope.stockDataResponse, function(stockData) {
+       if ($scope.articles.length > iterator) {
+         var stockDataDate = stockData.timestamp;
+         var newsDate = $scope.articles[iterator].publication_timestamp;
+        if (stockDataDate < newsDate) {
+          newsDataArray.push(null)
+        } else {
+          newsDataArray.push(stockData.open)
+          iterator++;
+        }
+      }
      });
 
      // Draw the graphs.
@@ -95,16 +128,14 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
        labels: dataLabelsArray,
        datasets: [
          {
-           label: "test",
            fillColor: "rgba(151,187,205,0.0)",
            strokeColor: "rgba(151,187,205,0)",
            pointColor: "rgba(255,0,90,1)",
            pointStrokeColor: "rgba(255,0,90,1)",
            pointHighlightFill: "rgba(255,0,90,1)",
            pointHighlightStroke: "rgba(255,0,90,1)",
-           data: dataArray
+           data: newsDataArray
          }, {
-           label: "test",
            fillColor: "rgba(151,187,205,0.2)",
            strokeColor: "rgba(151,187,205,1)",
            pointColor: "rgba(0,0,0,0)",
@@ -117,7 +148,10 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
      }
 
      var chartCanvas = document.getElementById("canvas").getContext("2d");
-     var lineChart = new Chart(chartCanvas).Line(data);
+     var lineChart = new Chart(chartCanvas).Line(data, {
+       scaleStartValue: minData,
+       scaleEndValue: maxData
+     });
     };
 
     $scope.dateForArticle = function(article) {
@@ -155,29 +189,20 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       }
     };
 
-    $scope.orderByMaxImpact = function() {
-      $scope.tab = 'maxImpact';
+    $scope.orderByMaxScore = function() {
+      $scope.tab = 'maxScore';
       if ($scope.relatedArticles.length > 0) {
         $scope.relatedArticles.sort(function(prev, curr) {
-          return curr.maxImpact - prev.maxImpact
+          return curr.maxImpact - prev.maxImpact;
         });
       }
     };
 
-    $scope.orderByBestImpact = function() {
-      $scope.tab = 'bestImpact';
+    $scope.orderByMinScore = function() {
+      $scope.tab = 'minScore';
       if ($scope.relatedArticles.length > 0) {
         $scope.relatedArticles.sort(function(prev, curr) {
-          return curr.bestImpact - prev.bestImpact
-        });
-      }
-    };
-
-    $scope.orderByWorstImpact = function() {
-      $scope.tab = 'worstImpact';
-      if ($scope.relatedArticles.length > 0) {
-        $scope.relatedArticles.sort(function(prev, curr) {
-          return curr.worstImpact - prev.worstImpact
+          return prev.maxImpact - curr.maxImpact;
         });
       }
     };
