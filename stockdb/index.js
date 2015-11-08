@@ -207,6 +207,9 @@ router.get('/getinterval/:sym/:date/:days', function(req, res) {
 });
 
 router.get('/gethisto/:sym', function(req, res) {        
+    if (req.params.sym === 'undefined') {
+	return res.json({error: 'No Symbol given!'});
+    }
     StockHisto.find({symbol: req.params.sym, timestamp: {$gt: 1443657600}}).sort({'timestamp': 1}).exec(function(err, stocks){
         if (err) {
             console.log(err);
@@ -215,7 +218,7 @@ router.get('/gethisto/:sym', function(req, res) {
   	}
 
 	var sub = 0;
-	if (stocks) {
+	if (stocks || stocks === 'undefined' || stocks.length > 0) {
 	    console.log("Stocks defined");
 	    sub = stocks[0].open;
 	}
