@@ -5,3 +5,5 @@ numpy
 arrow
 simplejson
 newspaper3k
+simplejson
+newspaper3k

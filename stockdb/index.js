@@ -19,6 +19,9 @@ var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 
 var YQL = require('yql');
 
+var util = require('util')
+var exec = require('child_process').exec;
+
 console.log("Connect to " + mongodbUri);
 mongoose.connect(mongooseUri);
 conn = mongoose.connection;
@@ -204,7 +207,7 @@ router.get('/getinterval/:sym/:date/:days', function(req, res) {
 });
 
 router.get('/gethisto/:sym', function(req, res) {        
-    StockHisto.find({symbol: req.params.sym}, function(err, stocks){
+    StockHisto.find({symbol: req.params.sym, timestamp: {$gt: 1443657600}}).sort({'timestamp': 1}).exec(function(err, stocks){
         if (err) {
             console.log(err);
             res.send(err);
@@ -233,7 +236,7 @@ router.get('/newspaper/:company', function(req, res) {
     }
     
     function getWorse() {
-	Newspaper.find({company: req.params.company}).sort({'worse_impact': -1}).limit(5).exec(function(err, elements) {
+	Newspaper.find({company: req.params.company}).sort({'worst_impact': -1}).limit(5).exec(function(err, elements) {
 	    if (err) {
 		console.log(err);
 		res.send(err);
@@ -267,6 +270,14 @@ router.get('/articles/:company/:newspaper', function(req, res) {
   	}
 	
         res.json(elements);
+    });
+});
+
+router.get('/show/article/:url', function(req, res) {
+    exec('./../sentimentanalysis/main.py',function(err,stdout,stderr){
+	util.puts(err);
+	console.log(stdout);
+	res.json(stdout);
     });
 });
 

@@ -15,6 +15,7 @@
     "mongodb-uri": "^0.9.7",
     "mongoose": "^4.2.4",
     "regression": "^1.2.1",
+    "util": "^0.10.3",
     "yql": "^1.0.2"
   }
 }
