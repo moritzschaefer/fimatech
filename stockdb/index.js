@@ -214,6 +214,15 @@ router.get('/gethisto/:sym', function(req, res) {
   	    return;
   	}
 
+	var sub = 0;
+	if (stocks) {
+	    console.log("Stocks defined");
+	    sub = stocks[0].open;
+	}
+
+	stocks.forEach(function(st) {
+	    st.open = st.open-sub;
+	});
         res.json(stocks);
     });
 });
@@ -262,7 +271,7 @@ router.get('/newspaper/:company', function(req, res) {
 
 
 router.get('/articles/:company/:newspaper', function(req, res) {
-    Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': 1}).limit(10).exec(function(err, elements) {	
+    Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': 1}).exec(function(err, elements) {	
 	if (err) {
             console.log(err);
             res.send(err);
@@ -270,15 +279,38 @@ router.get('/articles/:company/:newspaper', function(req, res) {
   	}
 
 	var result = [];
-	result = result.concat(result, elements);
+	var timestamps = [];
 
-	Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': 1}).limit(10).exec(function(err, elements2) {	
+	elements.every(function(element) {
+	    if (timestamps.indexOf(element.publication_timestamp) == -1) {
+		timestamps.push(element.publication_timestamp);
+		result.push(element);
+	    }
+	    if (result.length == 10) {
+		return false;
+	    }
+	    return true;
+	});
+
+	Article.find({company: req.params.company, newspaper: req.params.newspaper}).sort({'score': -1}).exec(function(err, elements2) {	
 	    if (err) {
 		console.log(err);
 		res.send(err);
   		return;
   	    }
-	    result = result.concat(result, elements2);
+
+	    elements2.every(function(element) {
+		if (timestamps.indexOf(element.publication_timestamp) == -1) {
+		    timestamps.push(element.publication_timestamp);
+		    result.push(element);
+		}
+	
+		if (result.length == 20) {
+		    return false;
+		}
+		return true;
+	    });
+	    
 	    res.json(result);
 	});
     });
