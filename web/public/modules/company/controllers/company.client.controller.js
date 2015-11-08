@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
-  function($scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
+angular.module('company').controller('CompanyController', ['$rootScope', '$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
+  function($rootScope, $scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
     $scope.authentication = Authentication;
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
@@ -9,6 +9,9 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
     // Initialize the passed state parameter.
     $scope.id = $stateParams.id;
     $scope.company = $scope.id;
+
+    // Filtering.
+    $rootScope.tab = 'date';
 
     // Initialize the company data.
     $scope.initCompanyData = function() {
@@ -20,7 +23,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       };
       $http(req).then(function(response) {
 	       $scope.stockDataResponse = response.data;
-         $scope.selecteNewspaper('www.tmcnet.com');
+         $scope.selectNewspaper('www.tmcnet.com');
       }, function(err) {
 	       console.log(err);
       });
@@ -41,7 +44,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
     };
 
 
-    $scope.selecteNewspaper = function(newspaper) {
+    $scope.selectNewspaper = function(newspaper) {
       // Load the newspaper data.
       var req = {
         method: 'GET',
@@ -51,6 +54,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
         $scope.articles = response.data;
 
         $scope.initializeChart();
+        $scope.orderByDate();
       }, function(err) {
          console.log(err);
       });
@@ -76,7 +80,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
 
      // Process news data - Iterate over data array and find fitting timeslots.
      angular.forEach($scope.articles, function(data) {
-       console.log(moment(data.publication_timestamp).format('MMMM Do YYYY, h:mm:ss a'));
+
      });
 
      // Draw the graphs.
@@ -87,24 +91,23 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
        datasets: [
          {
            label: "test",
+           fillColor: "rgba(151,187,205,0.0)",
+           strokeColor: "rgba(151,187,205,0)",
+           pointColor: "rgba(255,0,90,1)",
+           pointStrokeColor: "rgba(255,0,90,1)",
+           pointHighlightFill: "rgba(255,0,90,1)",
+           pointHighlightStroke: "rgba(255,0,90,1)",
+           data: dataArray
+         }, {
+           label: "test",
            fillColor: "rgba(151,187,205,0.2)",
            strokeColor: "rgba(151,187,205,1)",
-           pointColor: "rgba(151,187,205,1)",
-           pointStrokeColor: "#fff",
-           pointHighlightFill: "#fff",
-           pointHighlightStroke: "rgba(151,187,205,1)",
+           pointColor: "rgba(0,0,0,0)",
+           pointStrokeColor: "rgba(0,0,0,0)",
+           pointHighlightFill: "rgba(0,0,0,0)",
+           pointHighlightStroke: "rgba(0,0,0,0)",
            data: dataArray
          }
-         // }, {
-         //   label: "test",
-         //   fillColor: "rgba(151,187,205,0.2)",
-         //   strokeColor: "rgba(151,187,205,1)",
-         //   pointColor: "rgba(0,0,0,0)",
-         //   pointStrokeColor: "rgba(0,0,0,0)",
-         //   pointHighlightFill: "rgba(0,0,0,0)",
-         //   pointHighlightStroke: "rgba(0,0,0,0)",
-         //   data: dataArray2,
-         // }
        ]
      }
 
@@ -127,6 +130,26 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
           doc.addImage(dataURL, 'jpeg', 0, 30);
           doc.save("Influence of '" + $scope.newspaper + "' on '" + $scope.company + "'.pdf");
       });
+    };
+
+    $scope.orderByDate = function() {
+
+    };
+
+    $scope.orderByName = function() {
+
+    };
+
+    $scope.orderByMaxImpact = function() {
+
+    };
+
+    $scope.orderByBestImpact = function() {
+
+    };
+
+    $scope.orderByWorstImpact = function() {
+
     };
 
     $scope.view = function(url) {

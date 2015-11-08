@@ -75,6 +75,29 @@
           </div>
         </div>
       </div>
+      <div class="content-topbar">
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="sortby-group">
+              <p class="pull-left">Sort by:</p>
+              <ul class="list-inline pull-left">
+                <li class="{active: tab == 'date'}">
+                  <a ng-click="orderByDate()">Date</a>
+                </li>
+                <li ng-class="{active: tab == 'sender'}">
+                  <a ng-click="orderByName()">Name</a>
+                </li>
+                <li ng-class="{active: tab == 'receiver'}">
+                  <a ng-click="orderByReceiver()">Receiver</a>
+                </li>
+                <li ng-class="{active: tab == 'amount'}">
+                  <a ng-click="orderByAmount()">Amount</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="content-box">
         <div class="box-head">
             <div class="pull-left">Related Articles</div>
