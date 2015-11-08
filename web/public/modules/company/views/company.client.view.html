@@ -13,24 +13,6 @@
         <div class="box-content" style="overflow: auto;">
 
 	  <div style="float: left; width: 33%;">
-	    <h3>Best Impact:</h3>
-	    <br />
-	    <ul class="list img-list">
-              <li ng-repeat="b in best">
-		  <div class="li-text left">
-		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
-		      {{b.newspaper}}
-		    </a>
-		  </div>
-		  <div style="margin: 10px;">&nbsp;</div>
-		  <div class="li-text right">
-		    {{b.best_impact | number: 2}}
-		  </div>
-              </li>
-	    </ul>
-	  </div>
-
-	  <div style="float: left; width: 33%;">
 	    <h3>Max Impact:</h3>
 	    <br />
 	    <ul class="list img-list">
@@ -43,6 +25,24 @@
 		  <div style="margin: 10px;">&nbsp;</div>
 		  <div class="li-text right">
 		    {{b.max_impact | number: 2}}
+		  </div>
+              </li>
+	    </ul>
+	  </div>
+
+	  <div style="float: left; width: 33%;">
+	    <h3>Best Impact:</h3>
+	    <br />
+	    <ul class="list img-list">
+              <li ng-repeat="b in best">
+		  <div class="li-text left">
+		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		      {{b.newspaper}}
+		    </a>
+		  </div>
+		  <div style="margin: 10px;">&nbsp;</div>
+		  <div class="li-text right">
+		    {{b.best_impact | number: 2}}
 		  </div>
               </li>
 	    </ul>
