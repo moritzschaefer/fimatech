@@ -142,7 +142,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
            pointStrokeColor: "rgba(0,0,0,0)",
            pointHighlightFill: "rgba(0,0,0,0)",
            pointHighlightStroke: "rgba(0,0,0,0)",
-           data: dataArray
+           data: dataArray           
          }
        ]
      }
