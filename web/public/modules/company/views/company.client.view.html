@@ -111,7 +111,7 @@
         <div class="table-row" style="padding: 10px;" ng-repeat="article in relatedArticles">
           <div class="row row-parent">
             <a href="{{article.url}}" class="col-xs-4" class="description" target="_blank">{{article.title}}</a>
-            <div class="col-xs-2" class="description">{{ article.score | number: 3}} Score</div>
+            <div class="col-xs-2" class="description">{{ article.score | number: 3}}</div>
             <div class="col-xs-4" class="description">{{ dateForArticle(article); }}</div>
             <div class="col-xs-2" class="description">
               <button type="submit" class="btn btn-primary btn-small" ng-click="view(article.url);">View</button>
