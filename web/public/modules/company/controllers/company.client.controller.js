@@ -193,7 +193,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       $scope.tab = 'maxScore';
       if ($scope.relatedArticles.length > 0) {
         $scope.relatedArticles.sort(function(prev, curr) {
-          return curr.maxImpact - prev.maxImpact;
+          return curr.score - prev.score;
         });
       }
     };
@@ -202,7 +202,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
       $scope.tab = 'minScore';
       if ($scope.relatedArticles.length > 0) {
         $scope.relatedArticles.sort(function(prev, curr) {
-          return prev.maxImpact - curr.maxImpact;
+          return prev.score - curr.score;
         });
       }
     };
