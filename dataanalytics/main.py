@@ -38,7 +38,7 @@ def put_newspaper_data(db, company, newspapers_data):
 
 def update_article_ccs(db, articles_df):
     for index, item in articles_df.iterrows():
-        db.article.update({'_id': item['_id']}, {'$set': {'score': item['cc']}})
+        db.articles.update_one({'_id': item['_id']}, {'$set': {'score': item['cc']}}, upsert=False)
 
 
 def main():
