@@ -128,6 +128,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
        labels: dataLabelsArray,
        datasets: [
          {
+           label: "article",
            fillColor: "rgba(151,187,205,0.0)",
            strokeColor: "rgba(151,187,205,0)",
            pointColor: "rgba(255,0,90,1)",
@@ -136,13 +137,14 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
            pointHighlightStroke: "rgba(255,0,90,1)",
            data: newsDataArray
          }, {
+           label: "stock",
            fillColor: "rgba(151,187,205,0.2)",
            strokeColor: "rgba(151,187,205,1)",
            pointColor: "rgba(0,0,0,0)",
            pointStrokeColor: "rgba(0,0,0,0)",
            pointHighlightFill: "rgba(0,0,0,0)",
            pointHighlightStroke: "rgba(0,0,0,0)",
-           data: dataArray           
+           data: dataArray
          }
        ]
      }
@@ -150,7 +152,9 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
      var chartCanvas = document.getElementById("canvas").getContext("2d");
      var lineChart = new Chart(chartCanvas).Line(data, {
        scaleStartValue: minData,
-       scaleEndValue: maxData
+       scaleEndValue: maxData,
+       tooltipEvents: ["mousemove", "touchstart", "touchmove"],
+       multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
      });
     };
 
