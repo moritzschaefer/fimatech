@@ -89,7 +89,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
          maxData = data.open;
        }
 
-       if (labelsCount % 30 === 0) {
+       if (labelsCount % 5 === 0) {
          dataLabelsArray.push(moment(data.timestamp, 'X').format('Do MMM'));
        } else {
          dataLabelsArray.push("")
