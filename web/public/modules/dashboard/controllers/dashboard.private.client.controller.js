@@ -6,9 +6,11 @@ angular.module('dashboard').controller('DashboardController', ['$scope', '$http'
     $scope.authentication = Authentication;
     if (!$scope.authentication.user) $location.path('/');
 
+    $scope.savedSearches = function() {
 
+    };
 
-    $scope.receiveUsers = function() {
+    $scope.recentSearches = function() {
 
     };
   }

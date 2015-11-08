@@ -41,8 +41,8 @@ def pull_company_articles(company):
     :returns: list of article objects
 
     """
-    MAX_COUNT = 5  # go to conf
-    WISH_COUNT = 3
+    MAX_COUNT = 20  # go to conf
+    WISH_COUNT = 15
     positive_count, total_count = 0, 0
     try:
         del value_next

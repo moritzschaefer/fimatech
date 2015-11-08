@@ -40,15 +40,14 @@ def format_article(url):
     #For all the negative 'original texts' filter through the text and find the appropriate sentences to match, add brackets to them
     for negative in sentiment['negative']:
         match = negative['original_text']
-        print (match)
         for i in range(len(text)):
-            if match in text[i] and (text[0] != '[' or text[0] != '{' ):
+            if match in text[i] and (text[i][0] != '[' and text[i][0] != '{' ):
                 text[i] = "{"+text[i]+"}"
     #Same for positive
     for positive in sentiment['positive']:
         match = positive['original_text']
         for i in range(len(text)):
-            if match in text[i] and (text[0] != '[' or text[0] != '{' ):
+            if match in text[i] and (text[i][0] != '[' and text[i][0] != '{' ):
                 text[i] = "["+text[i]+"]"
     #combine the text array back into a single block of text and return
     return ''.join(text)

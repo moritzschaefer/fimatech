@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import logging
+import sys
 
 from pymongo import MongoClient
 
@@ -10,6 +11,7 @@ MONGO_CONF_FILE = '../shared/mongoconf.json'
 
 # - Fetch all articles
 # - One by one run format_article and update it..
+
 
 def main():
     with open(MONGO_CONF_FILE) as f:
@@ -29,6 +31,18 @@ def main():
             if not db.articles.update({'_id': article['_id']}, {'$set': {'sentiment_text': sentiment_text}}):
                 logging.warn('Couldn\'t update article with id {}'.format(article['_id']))
 
+def localmain(url):
+    try:
+        sentiment_text = format_article(url)
+        return json.dumps({'error': '', 'text': sentiment_text})
+    except RuntimeError:
+        return json.dumps({'error': 'Error fetching URL', 'text': ''})
+
+
+
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO)
-    main()
+    if len(sys.argv) > 1:
+        print(localmain(sys.argv[1]))
+    else:
+        logging.basicConfig(level=logging.INFO)
+        main()

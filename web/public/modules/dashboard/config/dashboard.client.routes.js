@@ -14,13 +14,13 @@ angular.module('dashboard').config(['$stateProvider',
       url: '/administration',
       templateUrl: 'modules/dashboard/views/administration/dashboard.administration.client.view.html'
     }).
-    state('dashboard.administration.users', {
-      url: '/users',
-      templateUrl: 'modules/dashboard/views/administration/dashboard.users.client.view.html'
+    state('dashboard.administration.savedsearches', {
+      url: '/savedsearches',
+      templateUrl: 'modules/dashboard/views/administration/saved_searches.client.view.html'
     }).
-    state('dashboard.administration.transactions', {
-      url: '/transactions',
-      templateUrl: 'modules/dashboard/views/administration/dashboard.transactions.client.view.html'
+    state('dashboard.administration.recentsearches', {
+      url: '/recentsearches',
+      templateUrl: 'modules/dashboard/views/administration/recent_searches.client.view.html'
     });
   }
 ]);
@@ -31,7 +31,7 @@ angular.module('dashboard').run(['$rootScope', '$state', 'Authentication',
       if (Authentication.user) {
         if (toState.name === 'dashboard.administration') {
           event.preventDefault();
-          $state.go('dashboard.administration.users');
+          $state.go('dashboard.administration.savedsearches');
         }
       }
     });
