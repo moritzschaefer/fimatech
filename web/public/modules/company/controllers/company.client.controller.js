@@ -89,7 +89,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
          maxData = data.open;
        }
 
-       if (labelsCount % 5 === 0) {
+       if (labelsCount % 10 === 0) {
          dataLabelsArray.push(moment(data.timestamp, 'X').format('Do MMM'));
        } else {
          dataLabelsArray.push("")
@@ -153,8 +153,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
      var lineChart = new Chart(chartCanvas).Line(data, {
        scaleStartValue: minData,
        scaleEndValue: maxData,
-       tooltipEvents: ["mousemove", "touchstart", "touchmove"],
-       multiTooltipTemplate: "<%= datasetLabel %> - <%= value %>"
+       showTooltips: false
      });
     };
 
