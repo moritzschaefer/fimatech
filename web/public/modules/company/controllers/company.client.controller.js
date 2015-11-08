@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('company').controller('CompanyController', ['$rootScope', '$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
-  function($rootScope, $scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
+angular.module('company').controller('CompanyController', ['$scope', '$http', '$location', '$cookieStore', 'Authentication', '$stateParams', '$window',
+  function($scope, $http, $location, $cookieStore, Authentication, $stateParams, $window) {
     $scope.authentication = Authentication;
     // If user is not signed in then redirect back home
     if (!$scope.authentication.user) $location.path('/');
@@ -11,7 +11,7 @@ angular.module('company').controller('CompanyController', ['$rootScope', '$scope
     $scope.company = $scope.id;
 
     // Filtering.
-    $rootScope.tab = 'date';
+    $scope.tab = 'date';
 
     // Initialize the company data.
     $scope.initCompanyData = function() {
@@ -52,9 +52,14 @@ angular.module('company').controller('CompanyController', ['$rootScope', '$scope
       };
       $http(req).then(function(response) {
         $scope.articles = response.data;
+        $scope.relatedArticles = response.data;
 
+        // Chart will work with $scope.articles data.
         $scope.initializeChart();
+
+        // Related Articles will work with $scope.relatedArticles.
         $scope.orderByDate();
+
       }, function(err) {
          console.log(err);
       });
@@ -71,7 +76,7 @@ angular.module('company').controller('CompanyController', ['$rootScope', '$scope
      angular.forEach($scope.stockDataResponse, function(data) {
        dataArray.push(data.open);
        if (labelsCount % 30 === 0) {
-         dataLabelsArray.push(moment(data.timestamp).format('Do MMM'));
+         dataLabelsArray.push(moment(data.timestamp, 'X').format('Do MMM'));
        } else {
          dataLabelsArray.push("")
        }
@@ -133,23 +138,48 @@ angular.module('company').controller('CompanyController', ['$rootScope', '$scope
     };
 
     $scope.orderByDate = function() {
-
+      $scope.tab = 'date';
+      if ($scope.relatedArticles.length > 0) {
+        $scope.relatedArticles.sort(function(prev, curr) {
+          return curr.publication_timestamp - prev.publication_timestamp;
+        });
+      }
     };
 
-    $scope.orderByName = function() {
-
+    $scope.orderByTitle = function() {
+      $scope.tab = 'title';
+      if ($scope.relatedArticles.length > 0) {
+        $scope.relatedArticles.sort(function(prev, curr) {
+          return curr.title.toLowerCase() - prev.title.toLowerCase();
+        });
+      }
     };
 
     $scope.orderByMaxImpact = function() {
-
+      $scope.tab = 'maxImpact';
+      if ($scope.relatedArticles.length > 0) {
+        $scope.relatedArticles.sort(function(prev, curr) {
+          return curr.maxImpact - prev.maxImpact
+        });
+      }
     };
 
     $scope.orderByBestImpact = function() {
-
+      $scope.tab = 'bestImpact';
+      if ($scope.relatedArticles.length > 0) {
+        $scope.relatedArticles.sort(function(prev, curr) {
+          return curr.bestImpact - prev.bestImpact
+        });
+      }
     };
 
     $scope.orderByWorstImpact = function() {
-
+      $scope.tab = 'worstImpact';
+      if ($scope.relatedArticles.length > 0) {
+        $scope.relatedArticles.sort(function(prev, curr) {
+          return curr.worstImpact - prev.worstImpact
+        });
+      }
     };
 
     $scope.view = function(url) {

@@ -86,18 +86,21 @@
           <div class="col-sm-6">
             <div class="sortby-group">
               <p class="pull-left">Sort by:</p>
-              <ul class="list-inline pull-left">
-                <li class="{active: tab == 'date'}">
+              <ul class="list-inline pull-left  margin-top-20">
+                <li ng-class="{active: tab == 'date'}">
                   <a ng-click="orderByDate()">Date</a>
                 </li>
-                <li ng-class="{active: tab == 'sender'}">
-                  <a ng-click="orderByName()">Name</a>
+                <li ng-class="{active: tab == 'title'}">
+                  <a ng-click="orderByTitle()">Title</a>
                 </li>
-                <li ng-class="{active: tab == 'receiver'}">
-                  <a ng-click="orderByReceiver()">Receiver</a>
+                <li ng-class="{active: tab == 'maxImpact'}">
+                  <a ng-click="orderByMaxImpact()">Maximum Impact</a>
                 </li>
-                <li ng-class="{active: tab == 'amount'}">
-                  <a ng-click="orderByAmount()">Amount</a>
+                <li ng-class="{active: tab == 'bestImpact'}">
+                  <a ng-click="orderByBestImpact()">Best Impact</a>
+                </li>
+                <li ng-class="{active: tab == 'worstImpact'}">
+                  <a ng-click="orderByWorstImpact()">Worst Impact</a>
                 </li>
               </ul>
             </div>
@@ -108,7 +111,7 @@
         <div class="box-head">
             <div class="pull-left">Related Articles</div>
         </div>
-        <div class="table-row" ng-repeat="article in articles">
+        <div class="table-row" ng-repeat="article in relatedArticles">
           <div class="row row-parent">
             <a href="{{article.url}}" class="col-xs-4" class="description" target="_blank">{{article.title}}</a>
             <div class="col-xs-2" class="description">{{ article.score }} Score</div>
