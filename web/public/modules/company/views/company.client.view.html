@@ -12,49 +12,55 @@
         </div>
         <div class="box-content" style="overflow: auto;">
 
-	  <div style="float: left; width: 30%;">
+	  <div style="float: left; width: 33%;">
 	    <h3>Best Impact:</h3>
+	    <br />
 	    <ul class="list img-list">
               <li ng-repeat="b in best">
-		<a href="#" class="inner">
-		  <div class="li-text">
-		    <h5>{{b.newspaper}}</h5>
+		  <div class="li-text left">
+		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		      {{b.newspaper}}
+		    </a>
 		  </div>
+		  <div style="margin: 10px;">&nbsp;</div>
 		  <div class="li-text right">
-		    <h3>{{b.best_impact}}</h3>
+		    {{b.best_impact | number: 2}}
 		  </div>
-		</a>
               </li>
 	    </ul>
 	  </div>
 
-	  <div style="float: left; width: 30%;">
+	  <div style="float: left; width: 33%;">
 	    <h3>Max Impact:</h3>
+	    <br />
 	    <ul class="list img-list">
               <li ng-repeat="b in max">
-		<a href="#" class="inner">
-		  <div class="li-text">
-		    <h5>{{b.newspaper}}</h5>
+		  <div class="li-text left">
+		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		      {{b.newspaper}}
+		    </a>
 		  </div>
+		  <div style="margin: 10px;">&nbsp;</div>
 		  <div class="li-text right">
-		    <h3>{{b.best_impact}}</h3>
+		    {{b.max_impact | number: 2}}
 		  </div>
-		</a>
               </li>
 	    </ul>
 	  </div>
 
-
-	  <div style="float: left; width: 30%;">
+	  <div style="float: left; width: 33%;">
 	    <h3>Worst Impact:</h3>
+	    <br />
 	    <ul class="list img-list">
-              <li ng-repeat="b in worst">
-		<a href="#" class="inner">
-		  <div class="li-text">
-		    <h5>{{b.newspaper}}</h5>
+              <li ng-repeat="b in worse">
+		  <div class="li-text left">
+		    <a ng-click="selectNewspaper({{b.newspaper}})" class="inner">
+		      {{b.newspaper}}
+		    </a>
 		  </div>
-		  <div class="li-text">
-		    <h3>{{b.best_impact}}</h3>
+		  <div style="margin: 10px;">&nbsp;</div>
+		  <div class="li-text right">
+		    {{b.worst_impact | number: 2}}
 		  </div>
 		</a>
               </li>

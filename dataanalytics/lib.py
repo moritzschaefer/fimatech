@@ -3,7 +3,7 @@ import math
 import numpy as np
 import pandas as pd
 
-def _get_stock_data_around_timestamp(timestamp, stock_data, interval=3600*24): # TODO: make this bigger
+def _get_stock_data_around_timestamp(timestamp, stock_data, interval=3600*24):
     """ Returns the datapoints in stock_data which are in the interval timestamp-interval:timestamp+interval
     :timestamp: the timestamp around we want the stock data
     :stock_data: array with timed stock data values
@@ -23,7 +23,7 @@ def _calculate_cc(article, stock_data):
     A = np.vstack([interesting_stock_data['timestamp'], np.ones(len(interesting_stock_data['timestamp']))]).T
 
     try:
-        m, c = np.linalg.lstsq(A, interesting_stock_data['open'])[0] # TODO: should we divide this through the value of the stock? actually i think yes because percentage is more interesting than absolute values.. In the end both works..
+        m, c = np.linalg.lstsq(A, interesting_stock_data['open'])[0]
     except ValueError:
         import ipdb; ipdb.set_trace()
 
@@ -49,13 +49,13 @@ def process_company(company, stock_data, articles):
     """
 
     stock_data_df = pd.DataFrame(stock_data)
-    articles_df = pd.DataFrame(articles, columns=['url', 'title', 'company', 'newspaper', 'publication_timestamp'])
+    articles_df = pd.DataFrame(articles, columns=['url', 'title', 'company', 'newspaper', 'publication_timestamp', '_id'])
     if len(articles_df) == 0:
         raise ValueError('articles must not be empty')
     if len(stock_data_df) == 0:
         raise ValueError('stack_data must not be empty')
     articles_df['cc'] = articles_df.apply(lambda article: _calculate_cc(article, stock_data_df), axis=1)
-    articles_df = articles_df[np.logical_not(np.isnan(articles_df['cc']))]
+    articles_df[(np.isnan(articles_df['cc']))] = 0
     newspapers = []
     for newspaper, group in articles_df.groupby('newspaper'):
         # TODO: maybe calculate best and worst differently (without filtering, square without losing sign)
@@ -71,5 +71,5 @@ def process_company(company, stock_data, articles):
             'company': company
             })
 
-    return newspapers
+    return newspapers, articles_df
 
