@@ -89,7 +89,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
          maxData = data.open;
        }
 
-       if (labelsCount % 30 === 0) {
+       if (labelsCount % 5 === 0) {
          dataLabelsArray.push(moment(data.timestamp, 'X').format('Do MMM'));
        } else {
          dataLabelsArray.push("")
@@ -142,7 +142,7 @@ angular.module('company').controller('CompanyController', ['$scope', '$http', '$
            pointStrokeColor: "rgba(0,0,0,0)",
            pointHighlightFill: "rgba(0,0,0,0)",
            pointHighlightStroke: "rgba(0,0,0,0)",
-           data: dataArray
+           data: dataArray           
          }
        ]
      }
